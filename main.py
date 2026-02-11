@@ -16,24 +16,19 @@ templates = Jinja2Templates(directory="templates")
 dp = DataProcessor()
 ai = LibraryAIAgent()
 
-# --- Exception Handlers ---
-
-@app.exception_handler(404)
-async def custom_404_handler(request: Request, __):
-    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-
-# --- Routes ---
-
+# routes
 @app.get("/", response_class=HTMLResponse)
-async def landing_page(request: Request):
-    """The high-impact entry point."""
+async def landing(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard_page(request: Request):
-    """The functional 'Library OS' tool."""
-    branches = dp.get_branch_list()
-    return templates.TemplateResponse("dashboard.html", {"request": request, "branches": branches})
+async def dashboard(request: Request):
+    # This will eventually pull the branch list from data_processor.py
+    return templates.TemplateResponse("dashboard.html", {"request": request, "branches": []})
+
+@app.exception_handler(404)
+async def not_found(request: Request, exc):
+    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
 
 @app.post("/generate-insights")
 async def generate_insights(request: Request, branch_name: str = Form(...), persona: str = Form(...)):
