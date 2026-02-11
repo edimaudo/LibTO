@@ -25,9 +25,15 @@ async def custom_404_handler(request: Request, __):
 # --- Routes ---
 
 @app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
+async def landing_page(request: Request):
+    """The high-impact entry point."""
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard_page(request: Request):
+    """The functional 'Library OS' tool."""
     branches = dp.get_branch_list()
-    return templates.TemplateResponse("index.html", {"request": request, "branches": branches})
+    return templates.TemplateResponse("dashboard.html", {"request": request, "branches": branches})
 
 @app.post("/generate-insights")
 async def generate_insights(request: Request, branch_name: str = Form(...), persona: str = Form(...)):
