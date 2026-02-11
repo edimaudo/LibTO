@@ -1,0 +1,163 @@
+_id,Type,Name,MaxCapacity,Square footage,Branch Code
+1,Community Rooms,Albion Auditorium,60,1300,AB
+2,Community Rooms,Albion Meeting Room,12,380,AB
+3,Community Rooms,Albert Campbell Auditorium,95,1300,ACD
+4,Community Rooms,Albert Campbell Meeting Room,25,498,ACD
+5,Community Rooms,Agincourt Auditorium,65,1500,AG
+6,Community Rooms,Annette Auditorium,40,1083,AN
+7,Community Rooms,Annette Meeting Room,25,420,AN
+8,Community Rooms,Brookbanks Meeting Room,55,560,BB
+9,Community Rooms,Black Creek Auditorium,42,1508,BC
+10,Community Rooms,Bendale Auditorium,140,1072,BD
+11,Community Rooms,Beaches Meeting Room,50,420,BE
+12,Community Rooms,Barbara Frum Auditorium - Room B,95,1089,BF
+13,Study Pod or Study Room,Barbara Frum Library Study Room A,3,null,BF
+14,Study Pod or Study Room,Barbara Frum Library Study Room B,3,null,BF
+15,Study Pod or Study Room,Barbara Frum Library Study Room C,3,null,BF
+16,Community Rooms,Barbara Frum Meeting Room A,30,432,BF
+17,Community Rooms,Bloor/Gladstone Auditorium,40,1060,BL
+18,Study Pod or Study Room,Bloor/Gladstone Library Study Room 1,4,null,BL
+19,Study Pod or Study Room,Bloor/Gladstone Library Study Room 2,4,null,BL
+20,Study Pod or Study Room,Bloor/Gladstone Library Study Room 3,4,null,BL
+21,Study Pod or Study Room,Bloor/Gladstone Library Study Room 4,4,null,BL
+22,Community Rooms,Brentwood Meeting Room,50,716,BR
+23,Community Rooms,Cliffcrest Meeting Room,25,464,CC
+24,Community Rooms,Centennial Auditorium,51,1848,CE
+25,Community Rooms,Cedarbrae Auditorium,60,1750,CED
+26,Study Pod or Study Room,Cedarbrae Library Study Room 1,4,null,CED
+27,Study Pod or Study Room,Cedarbrae Library Study Room 2,4,null,CED
+28,Study Pod or Study Room,Cedarbrae Library Study Room 3,8,null,CED
+29,Study Pod or Study Room,Cedarbrae Library Study Room 4,4,null,CED
+30,Community Rooms,North York Central Auditorium,139,1724,CL
+31,Community Rooms,North York Central Meeting Room 1,66,868,CL
+32,Community Rooms,North York Central Meeting Room 101,60,850,CL
+33,Community Rooms,North York Central Meeting Room 2/3,41,608,CL
+34,Community Rooms,College/Shaw Auditorium,47,1226,CS
+35,Community Rooms,College/Shaw Meeting Room,18,426,CS
+36,Community Rooms,Danforth/Coxwell Meeting Room,61,890,DA
+37,Community Rooms,Daniel G. Hill Meeting Room,50,765,DGH
+38,Community Rooms,Don Mills Auditorium,90,1260,DM
+39,Community Rooms,Don Mills Meeting Room 1,12,248,DM
+40,Community Rooms,Don Mills Meeting Room 2,12,248,DM
+41,Community Rooms,Downsview Auditorium,50,1405,DO
+42,Community Rooms,Downsview Main Floor Meeting Room,18,600,DO
+43,Community Rooms,Downsview Meeting Room A,6,242,DO
+44,Community Rooms,Downsview Meeting Room B,31,486,DO
+45,Community Rooms,Deer Park Main Floor Meeting Room,16,419,DP
+46,Community Rooms,Deer Park Meeting Room 204,64,776,DP
+47,Community Rooms,Dawes Road Meeting Room,26,450,DR
+48,Community Rooms,Davenport Meeting Room,32,579,DT
+49,Community Rooms,Dufferin/St. Clair Meeting Room,60,818,DU
+50,Community Rooms,Eatonville Auditorium,100,1000,EA
+51,Community Rooms,Evelyn Gregory Meeting Room,40,874,EG
+52,Community Rooms,Ethennonnhawahstihnen' Large Program Room,5,800,EN
+53,Community Rooms,Ethennonnhawahstihnen' Small Meeting Room,5,800,EN
+54,Community Rooms,Eglinton Square Meeting 1,20,594,ES
+55,Community Rooms,Eglinton Square Meeting/Program Room,55,748,ES
+56,Community Rooms,Forest Hill Meeting Room,30,720,FH
+57,Community Rooms,Fort York Meeting Room,40,800,FO
+58,Community Rooms,Flemingdon Park Auditorium,65,1364,FP
+59,Study Pod or Study Room,Fairview Library Study Room 1,2,null,FV
+60,Study Pod or Study Room,Fairview Library Study Room 2,2,null,FV
+61,Study Pod or Study Room,Fairview Library Study Room 3,2,null,FV
+62,Study Pod or Study Room,Fairview Library Study Room 4,2,null,FV
+63,Study Pod or Study Room,Fairview Library Study Room 5,2,null,FV
+64,Study Pod or Study Room,Fairview Library Study Room 6,2,null,FV
+65,Study Pod or Study Room,Fairview Library Study Room 7,2,null,FV
+66,Study Pod or Study Room,Fairview Library Study Room 8,2,null,FV
+67,Community Rooms,Fairview Meeting Room 1,50,700,FV
+68,Community Rooms,Fairview Meeting Room 2,50,710,FV
+69,Community Rooms,Fairview Meeting Room 3,96,1435,FV
+70,Community Rooms,Fairview Meeting Room 4,24,440,FV
+71,Theatres,Fairview Theatre,260,4320,FV
+72,Community Rooms,Gerrard/Ashdale Meeting Room,30,496,GE
+73,Community Rooms,Goldhawk Park Meeting Room,40,750,GHP
+74,Community Rooms,Guildwood Meeting Room,25,335,GW
+75,Community Rooms,Highland Creek Meeting Room,50,500,HC
+76,Community Rooms,Hillcrest Auditorium,75,1288,HIL
+77,Community Rooms,High Park Meeting Room,40,937,HP
+78,Community Rooms,Humber Summit Auditorium,65,1551,HS
+79,Community Rooms,Humber Summit Meeting Room 1,24,504,HS
+80,Community Rooms,Jane/Sheppard Meeting Room,35,500,JS
+81,Community Rooms,Kennedy/Eglinton Meeting Room 1,30,570,KE
+82,Community Rooms,Kennedy/Eglinton Meeting Room 2,15,325,KE
+83,Community Rooms,Long Branch Meeting Room,49,725,LB
+84,Community Rooms,Leaside Auditorium,75,1000,LE
+85,Community Rooms,Locke Meeting Room,30,614,LO
+86,Community Rooms,Lillian H. Smith Auditorium BC,70,1100,LS
+87,Community Rooms,Lillian H. Smith Meeting Room A,30,640,LS
+88,Community Rooms,Main Street Meeting Room,30,687,MA
+89,Community Rooms,Malvern Auditorium,70,1300,MAL
+90,Community Rooms,Malvern Meeting Room 1,10,380,MAL
+91,Community Rooms,Maria A. Shchuka Meeting Room A,60,615,MAS
+92,Community Rooms,Maria A. Shchuka Meeting Room B,30,390,MAS
+93,Community Rooms,McGregor Park Meeting Room,30,384,MCG
+94,Community Rooms,Mount Dennis Meeting Room 1,50,775,MD
+95,Community Rooms,Mount Dennis Meeting Room 2,20,340,MD
+96,Community Rooms,Mimico Auditorium,125,4649,MI
+97,Community Rooms,Mimico Meeting Room,16,450,MI
+98,Community Rooms,Mount Pleasant Meeting Room,70,791,MP
+99,Community Rooms,Maryvale Boardroom,8,400,MRV
+100,Community Rooms,Maryvale Program Room,30,400,MRV
+101,Community Rooms,Morningside Meeting Room,50,600,MS
+102,Community Rooms,Northern District Gwen Liu Meeting Room 200,100,2389,ND
+103,Community Rooms,Northern District Main Floor Meeting Room,48,820,ND
+104,Community Rooms,Northern District Room 224,89,1600,ND
+105,Community Rooms,New Toronto Meeting Room,50,693,NT
+106,Community Rooms,Oakwood Village Auditorium,100,2640,OV
+107,Community Rooms,Pape/Danforth Meeting Room,30,423,PA
+108,Community Rooms,Perth/Dupont Meeting Room,21,409,PE
+109,Community Rooms,Parkdale Auditorium,150,3610,PK
+110,Community Rooms,Parkdale Meeting Room A,30,650,PK
+111,Community Rooms,Parkdale Meeting Room B,12,239,PK
+112,Community Rooms,Parliament Main Floor Meeting Room,27,400,PL
+113,Community Rooms,Parliament Meeting Room,60,968,PL
+114,Community Rooms,Palmerston Meeting Room,25,413,PM
+115,Theatres,Palmerston Theatre,120,1994,PM
+116,Community Rooms,Port Union Meeting Room,40,450,PU
+117,Community Rooms,Pleasant View Auditorium,100,1160,PV
+118,Community Rooms,Riverdale Meeting Room 1,60,800,RD
+119,Community Rooms,Riverdale Meeting Room 2,30,400,RD
+120,Community Rooms,Richview Auditorium,50,1069,RI
+121,Community Rooms,Richview Meeting Room B,40,580,RI
+122,Community Rooms,Runnymede Meeting Room,60,625,RN
+123,Community Rooms,Sanderson Auditorium,70,1479,SA
+124,Community Rooms,Scarborough Civic Centre Meeting Room,40,792,SC
+125,Community Rooms,St. Clair/Silverthorn Meeting Room,35,357,SI
+126,Community Rooms,Steeles Meeting Room,40,500,ST
+127,Community Rooms,S. Walter Stewart Auditorium,110,1500,SWS
+128,Community Rooms,S. Walter Stewart Meeting Room,15,387,SWS
+129,Community Rooms,Taylor Memorial Meeting Room,40,500,TA
+130,Community Rooms,Thorncliffe Meeting Room,42,733,TH
+131,Community Rooms,Toronto Reference Library Meeting Room B1,,305,TRL
+132,Study Pod or Study Room,Toronto Reference Library Study Pod 2-1,2,null,TRL
+133,Study Pod or Study Room,Toronto Reference Library Study Pod 2-2,2,null,TRL
+134,Study Pod or Study Room,Toronto Reference Library Study Pod 2-3,2,null,TRL
+135,Study Pod or Study Room,Toronto Reference Library Study Pod 2-4,2,null,TRL
+136,Study Pod or Study Room,Toronto Reference Library Study Pod 2-5,2,null,TRL
+137,Study Pod or Study Room,Toronto Reference Library Study Pod 3-1,2,null,TRL
+138,Study Pod or Study Room,Toronto Reference Library Study Pod 3-2,2,null,TRL
+139,Study Pod or Study Room,Toronto Reference Library Study Pod 3-3,2,null,TRL
+140,Study Pod or Study Room,Toronto Reference Library Study Pod 3-4,2,null,TRL
+141,Study Pod or Study Room,Toronto Reference Library Study Pod 3-5,2,null,TRL
+142,Study Pod or Study Room,Toronto Reference Library Study Pod 4-1,2,null,TRL
+143,Study Pod or Study Room,Toronto Reference Library Study Pod 4-2,2,null,TRL
+144,Study Pod or Study Room,Toronto Reference Library Study Pod 4-3,2,null,TRL
+145,Study Pod or Study Room,Toronto Reference Library Study Pod 4-4,2,null,TRL
+146,Study Pod or Study Room,Toronto Reference Library Study Pod 4-5,2,null,TRL
+147,Study Pod or Study Room,Toronto Reference Library Study Room 1,6,null,TRL
+148,Study Pod or Study Room,Toronto Reference Library Study Room 2,6,null,TRL
+149,Study Pod or Study Room,Toronto Reference Library Study Room 3,2,null,TRL
+150,Study Pod or Study Room,Toronto Reference Library Study Room 4,2,null,TRL
+151,Venue,TRL Beeton Hall,150,1900,TRL
+152,Venue,TRL Founders' Room,18,500,TRL
+153,Program Room,TRL Hinton Theatre,70,1316,TRL
+154,Venue,TRL Sonnet,12,200,TRL
+155,Community Rooms,Victoria Village Barry Burton Auditorium,75,1800,VV
+156,Community Rooms,Weston Meeting Room,50,851,WE
+157,Community Rooms,Woodside Square Meeting Room,55,875,WS
+158,Community Rooms,Wychwood Meeting Room,59,661,WY
+159,Community Rooms,Yorkville Meeting Room,16,280,YO
+160,Community Rooms,York Woods Meeting Room 1 - NO LONGER AVAILABLE,23,483,YW
+161,Community Rooms,York Woods Program Room,25,690,YW
+162,Theatres,York Woods Theatre,235,13625,YW
