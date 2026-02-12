@@ -1,12 +1,12 @@
 # LibTO
-LibTO is a civic intelligence platform designed to transform [Toronto Public Library (TPL)](https://tpl.ca/about-the-library/open-data/) open data into actionable operational insights.
+LibTO is a civic intelligence app designed to transform [Toronto Public Library (TPL)](https://tpl.ca/about-the-library/open-data/) open data into actionable operational insights.
 By leveraging Toronto Open Data and DigitalOcean Gradient AI, libTO allows denizens to understand library branch health and can discover programs & events.
 
 ## Key Features
 ### Overview
-Operational Dashboard: A high-level overview of the Toronto Public Library System
+A high-level overview of the Toronto Public Library System
 
-### Library Insights
+### Branch Intelligence
 Library Operations: Ask questions about library operations + understand how library branches have changed overtime
 - Library Agent: Can ask questions about library information or use it to search for certain amenities the library has
 - Library Branch Forecaster: A tool to forecast visits, card registrations, workstation usage, circulations
@@ -28,6 +28,7 @@ Libeary Events: Leverages open data to show events happening at the different br
 ## Project Structure
 ```
 libTO/
+├── data
 ├── main.py              # FastAPI routes and server logic
 ├── data_processor.py    # Pandas logic for data cleaning & Health Index calculations
 ├── ai_agents.py         # DigitalOcean Gradient AI persona & simulation logic
