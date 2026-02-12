@@ -1,5 +1,5 @@
 # LibTO
-LibTO is a civic intelligence platform and "Library OS" designed to transform [Toronto Public Library (TPL)](https://tpl.ca/about-the-library/open-data/) open data into actionable operational insights.
+LibTO is a civic intelligence platform designed to transform [Toronto Public Library (TPL)](https://tpl.ca/about-the-library/open-data/) open data into actionable operational insights.
 By leveraging Toronto Open Data and DigitalOcean Gradient AI, libTO allows denizens to understand library branch health and can discover programs & events.
 
 ## Key Features
