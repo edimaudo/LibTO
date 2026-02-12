@@ -1,9 +1,37 @@
 :root {
     --tpl-blue: #007FA3;
     --tpl-red: #E31837;
-    --tpl-black: #1A1A1A; /* Darker background for "OS" feel */
     --tpl-dark-grey: #333333;
     --tpl-white: #FFFFFF;
+    --tpl-black: #000000;
+    --tpl-deep-grey: #1a1a1a;
+    --tpl-logo-grey: #808184;
+    --tpl-accent-blue: #007FA3;
+    --tpl-white: #ffffff;
+}
+
+/* Updated Call to Action */
+.cta-button-main {
+    background-color: transparent;
+    color: var(--tpl-white);
+    padding: 14px 40px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--tpl-logo-grey);
+    border-radius: 2px; /* Sharper edges for an OS feel */
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.cta-button-main:hover {
+    background-color: var(--tpl-white);
+    color: var(--tpl-black);
+    border-color: var(--tpl-white);
+    cursor: pointer;
 }
 
 body {
