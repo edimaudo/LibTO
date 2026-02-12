@@ -1,172 +1,127 @@
-/* TPL DESIGN SYSTEM TOKENS */
 :root {
-    --tpl-blue: #007FA3;     /* Core Brand Blue */
-    --tpl-red: #E31837;      /* Call to Action Red */
-    --tpl-dark: #333333;     /* Primary Text */
-    --tpl-grey: #F4F7F6;     /* Section Contrast Grey */
+    --tpl-blue: #007FA3;
+    --tpl-red: #E31837;
+    --tpl-black: #1A1A1A; /* Darker background for "OS" feel */
+    --tpl-dark-grey: #333333;
     --tpl-white: #FFFFFF;
-    --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-* {
-    box-sizing: border-box;
 }
 
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--font-main);
-    color: var(--tpl-dark);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: var(--tpl-black);
+    color: var(--tpl-white);
     line-height: 1.6;
 }
 
-/* HEADER & NAVIGATION */
-header {
-    padding: 1.5rem 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--tpl-white);
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.logo-container img {
-    height: 40px;
-}
-
-.nav-cta {
-    background: var(--tpl-blue);
-    color: var(--tpl-white);
-    padding: 10px 22px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 600;
-}
-
-/* HERO SECTION */
+/* Hero Content */
 .hero-landing {
-    background-color: var(--tpl-blue);
-    color: var(--tpl-white);
-    padding: 120px 5%;
+    padding: 100px 5% 60px;
     text-align: center;
+    background: linear-gradient(180deg, var(--tpl-dark-grey) 0%, var(--tpl-black) 100%);
 }
 
 .hero-landing h1 {
-    font-size: 4.5rem;
+    font-size: 5rem;
     margin: 0;
-    font-weight: 800;
-    letter-spacing: -1px;
+    color: var(--tpl-white);
+    letter-spacing: -3px;
+    font-weight: 900;
 }
 
 .hero-landing p {
-    font-size: 1.4rem;
-    margin: 20px 0 40px;
-    opacity: 0.9;
+    font-size: 1.5rem;
+    color: var(--tpl-blue);
+    font-weight: 500;
 }
 
+/* Pillar Grid (Side-by-Side) */
+.pillars-section {
+    padding: 40px 5% 100px;
+}
+
+.pillars-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Forces side-by-side */
+    gap: 30px;
+}
+
+.pillar-card {
+    background: var(--tpl-dark-grey);
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #444;
+    transition: transform 0.3s ease;
+}
+
+.pillar-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--tpl-blue);
+}
+
+.pillar-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.pillar-card h2 {
+    color: var(--tpl-blue);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--tpl-red);
+    display: inline-block;
+}
+
+.pillar-card p {
+    font-size: 1rem;
+    color: #CCC;
+    margin-bottom: 30px;
+    min-height: 80px; /* Keeps cards aligned */
+}
+
+/* Visualization Placeholders */
+.placeholder-box {
+    height: 200px;
+    background: #222;
+    border: 1px dashed #555;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Buttons */
 .cta-button-red {
-    background: var(--tpl-red);
-    color: var(--tpl-white);
-    padding: 18px 45px;
+    background-color: var(--tpl-red);
+    color: white;
+    padding: 18px 50px;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.1rem;
     border-radius: 4px;
     display: inline-block;
-    transition: background 0.2s ease;
+    transition: background 0.2s;
 }
 
 .cta-button-red:hover {
-    background: #b3132b;
+    background-color: #b3132b;
 }
 
-/* CORE PILLAR SECTIONS (The 3 Areas) */
-.landing-section {
-    padding: 100px 5%;
-}
-
-.alt-bg {
-    background-color: var(--tpl-grey);
-}
-
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-}
-
-/* Swap column order for alternating sections */
-.container.reverse {
-    direction: rtl;
-}
-
-.container.reverse > * {
-    direction: ltr; /* Reset text direction */
-}
-
-.section-text h2 {
-    color: var(--tpl-blue);
-    font-size: 2.8rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-}
-
-/* Subtle line under headers for TPL style */
-.section-text h2::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background: var(--tpl-red);
-    margin-top: 10px;
-}
-
-.section-text p {
-    font-size: 1.15rem;
-    color: #555;
-}
-
-/* VISUALIZATION PLACEHOLDERS */
-.placeholder-box {
-    width: 100%;
-    height: 350px;
-    background: var(--tpl-white);
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    font-weight: 500;
-    text-align: center;
-    padding: 20px;
-}
-
-/* FOOTER */
 footer {
-    padding: 60px 5%;
-    background: #222;
-    color: #ccc;
     text-align: center;
-    font-size: 0.9rem;
+    padding: 40px;
+    color: #666;
+    border-top: 1px solid #333;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .container, .container.reverse {
+/* Mobile: Stack them when screen is too small */
+@media (max-width: 1000px) {
+    .pillars-container {
         grid-template-columns: 1fr;
-        gap: 40px;
-        text-align: center;
-    }
-    .section-text h2::after {
-        margin: 10px auto;
-    }
-    .hero-landing h1 {
-        font-size: 3rem;
     }
 }
