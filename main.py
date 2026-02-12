@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.exceptions import HTTPException
 from data_processor import DataProcessor
 from ai_agents import LibraryAIAgent
+import os
 
 app = FastAPI()
 
