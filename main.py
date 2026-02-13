@@ -23,28 +23,22 @@ async def landing(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/overview", response_class=HTMLResponse)
-async def dashboard(request: Request):
-    return templates.TemplateResponse("overview.html", {"request": request})
+async def read_overview(request: Request):
+    kpis = dp.get_overview_kpis()
+    charts = dp.get_trend_charts()
+    heatmap = dp.get_heatmap()
+    
+    return templates.TemplateResponse("overview.html", {
+        "request": request,
+        "kpis": kpis,
+        "charts": charts,
+        "heatmap": heatmap
+    })
 
 @app.exception_handler(404)
 async def not_found(request: Request, exc):
     return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
 
-@app.post("/generate-insights")
-async def generate_insights(request: Request, branch_name: str = Form(...), persona: str = Form(...)):
-    try:
-        data = dp.get_branch_data(branch_name)
-        insight = await ai.get_persona_insight(persona, data)
-        # Placeholder for real-time visualization data
-        return {
-            "status": "success",
-            "branch": branch_name, 
-            "insight": insight, 
-            "data": data
-        }
-    except Exception as e:
-        # If branch data isn't found, trigger a controlled error
-        raise HTTPException(status_code=404, detail="Branch not found")
 
 # Start the server if running locally
 if __name__ == "__main__":
