@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>libTO | Overview</title>
+</head>
+<body class="light-theme">
 
+<header>
+    <h1>libTO Overview</h1>
+    <nav><a href="/">Back to Home</a></nav>
+</header>
+
+<main class="container">
+    <section class="pillars-container" style="margin-top: 40px;">
+        <div class="pillar-card">
+            <div class="accent-bar"></div>
+            <h2>Total Libraries</h2>
+            <p class="kpi-value">{{ kpis.count }}</p>
+        </div>
+        <div class="pillar-card">
+            <div class="accent-bar"></div>
+            <h2>Avg Sq Footage</h2>
+            <p class="kpi-value">{{ kpis.avg_sq_ft }} sq ft</p>
+        </div>
+        <div class="pillar-card">
+            <div class="accent-bar"></div>
+            <h2>Avg Workstations</h2>
+            <p class="kpi-value">{{ kpis.avg_ws }}</p>
+        </div>
+        <div class="pillar-card">
+            <div class="accent-bar"></div>
+            <h2>Oldest Branch</h2>
+            <p class="kpi-value">{{ kpis.oldest }}</p>
+        </div>
+    </section>
+
+    <h2 class="section-title">System Trends</h2>
+    <section class="charts-grid">
+        <div id="chart-reg" class="chart-box"></div>
+        <div id="chart-circ" class="chart-box"></div>
+        <div id="chart-visits" class="chart-box"></div>
+        <div id="chart-ws" class="chart-box"></div>
+    </section>
+
+    <h2 class="section-title">Square Footage Heatmap</h2>
+    <section class="heatmap-container">
+        <div id="heatmap-viz" style="height: 600px; border: 1px solid #eee;"></div>
+    </section>
+</main>
+
+<script>
+    // Rendering the JSON data from FastAPI
+    Plotly.newPlot('chart-reg', {{ charts.reg | safe }});
+    Plotly.newPlot('chart-circ', {{ charts.circ | safe }});
+    Plotly.newPlot('chart-visits', {{ charts.visits | safe }});
+    Plotly.newPlot('chart-ws', {{ charts.ws | safe }});
+    Plotly.newPlot('heatmap-viz', {{ heatmap | safe }});
+</script>
+
+</body>
+</html>
