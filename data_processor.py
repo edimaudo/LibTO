@@ -28,7 +28,7 @@ class DataProcessor:
         return branch_details
 
     def get_overview_kpis(self):
-            df = pd.read_csv(self.branch_info)
+            df = self.branch_info
             physical = df[df['PhysicalBranch'] != 0].copy()
             
             # Calculate KPIs
@@ -49,10 +49,10 @@ class DataProcessor:
 
     def get_trend_charts(self):
         # Load trend datasets
-        df_reg = pd.read_csv(self.branch_registration)
-        df_circ = pd.read_csv(self.branch_circulation)
-        df_visits = pd.read_csv(self.branch_visits)
-        df_ws = pd.read_csv(self.branch_workstation)
+        df_reg = self.branch_registration
+        df_circ = self.branch_circulation
+        df_visits = self.branch_visits
+        df_ws = self.branch_workstation
 
         # Grouping logic from your .ipynb
         charts = {}
@@ -72,7 +72,7 @@ class DataProcessor:
         return charts
 
     def get_heatmap(self):
-        df = pd.read_csv(self.branch_info)
+        df = self.branch_info
         geo_df = df[df['PhysicalBranch'] != 0].copy()
         
         fig = px.density_mapbox(
