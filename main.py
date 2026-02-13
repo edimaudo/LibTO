@@ -22,10 +22,9 @@ ai = LibraryAIAgent()
 async def landing(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/dashboard", response_class=HTMLResponse)
+@app.get("/overview", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    # This will eventually pull the branch list from data_processor.py
-    return templates.TemplateResponse("dashboard.html", {"request": request, "branches": []})
+    return templates.TemplateResponse("overview.html", {"request": request})
 
 @app.exception_handler(404)
 async def not_found(request: Request, exc):
