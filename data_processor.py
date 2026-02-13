@@ -30,7 +30,17 @@ class DataProcessor:
     def get_overview_kpis(self):
             df = self.branch_info
             physical = df[df['PhysicalBranch'] != 0].copy()
+
+            physical['SquareFootage'] = pd.to_numeric(
+                    physical['SquareFootage'].astype(str).str.replace(',', ''), 
+                    errors='coerce'
+                )
             
+            physical['Workstations'] = pd.to_numeric(
+                    physical['Workstations'], 
+                    errors='coerce'
+                )
+        
             # Calculate KPIs
             num_libraries = len(physical)
             avg_sq_ft = physical['SquareFootage'].mean()
