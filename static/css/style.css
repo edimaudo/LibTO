@@ -108,3 +108,13 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+.kpi-value { font-size: 1.5rem; font-weight: bold; color: var(--tpl-accent-blue); }
+.section-title { margin: 60px 0 30px; border-bottom: 2px solid var(--tpl-border); padding-bottom: 10px; }
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+.chart-box { background: #fff; padding: 15px; border: 1px solid var(--tpl-border); height: 400px; }
+.heatmap-container { margin-bottom: 100px; }
