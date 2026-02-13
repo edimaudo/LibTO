@@ -45,10 +45,11 @@ class DataProcessor:
             num_libraries = len(physical)
             avg_sq_ft = physical['SquareFootage'].mean()
             avg_ws = physical['Workstations'].mean()
-            
-            # Oldest branch - sorting by Established year
+
+            # Handle established year if it's a string too
+            physical['PresentSiteYear'] = pd.to_numeric(physical['PresentSiteYear'], errors='coerce')
             oldest = physical.sort_values('PresentSiteYear').iloc[0]
-            oldest_info = f"{oldest['BranchName']} ({int(oldest['PresentSiteYear'])})"
+            oldest_info = f"{oldest['BranchName']} ({int(oldest['Established'])})"
     
             return {
                 "count": num_libraries,
