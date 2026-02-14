@@ -64,6 +64,8 @@
             width: 100%;
             border: 1px solid #eee;
         }
+
+
     </style>
 </head>
 <body class="light-theme">
@@ -96,34 +98,36 @@
         </div>
     </section>
 
-    <h2 class="section-title">System Trends</h2>
-    <section class="charts-grid">
-        <div id="chart-reg" class="chart-box"></div>
-        <div id="chart-circ" class="chart-box"></div>
-        <div id="chart-visits" class="chart-box"></div>
-        <div id="chart-ws" class="chart-box"></div>
-    </section>
+<h2>System Trends</h2>
+    <div class="charts-grid">
+        <div id="reg" class="chart-box"></div>
+        <div id="circ" class="chart-box"></div>
+        <div id="visits" class="chart-box"></div>
+        <div id="ws" class="chart-box"></div>
+    </div>
 
-    <h2 class="section-title">Square Footage Heatmap</h2>
-    <section class="heatmap-container">
-        <div id="heatmap-viz"></div>
-    </section>
-</main>
+    <h2>Square Footage Heatmap</h2>
+    <div id="heatmap-viz"></div>
 
-<script>
-    // Ensure data exists before plotting
-    const graphConfig = { responsive: true, displayModeBar: false };
-    
-    try {
-        Plotly.newPlot('chart-reg', {{ charts.reg | safe }}, graphConfig);
-        Plotly.newPlot('chart-circ', {{ charts.circ | safe }}, graphConfig);
-        Plotly.newPlot('chart-visits', {{ charts.visits | safe }}, graphConfig);
-        Plotly.newPlot('chart-ws', {{ charts.ws | safe }}, graphConfig);
-        Plotly.newPlot('heatmap-viz', {{ heatmap | safe }}, { responsive: true });
-    } catch (e) {
-        console.error("Plotly Error:", e);
-    }
-</script>
+    <script>
+        const config = { responsive: true };
+
+        // Helper to safely parse and plot
+        function renderPlot(id, jsonData) {
+            try {
+                const parsedData = JSON.parse(jsonData);
+                Plotly.newPlot(id, parsedData.data, parsedData.layout, config);
+            } catch (e) {
+                console.error("Error rendering " + id, e);
+            }
+        }
+
+        renderPlot('reg', '{{ charts.reg | safe }}');
+        renderPlot('circ', '{{ charts.circ | safe }}');
+        renderPlot('visits', '{{ charts.visits | safe }}');
+        renderPlot('ws', '{{ charts.ws | safe }}');
+        renderPlot('heatmap-viz', '{{ heatmap | safe }}');
+    </script>
 
 </body>
 </html>
