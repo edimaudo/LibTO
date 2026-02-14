@@ -6,81 +6,121 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>libTO | Overview</title>
     <style>
-        body { text-align: center; font-family: sans-serif; }
+        body { text-align: center; background-color: #ffffff; color: #333; }
         
-        .header-section { margin: 60px 0; }
-        .header-section h1 { font-size: 3rem; color: #007FA3; }
+        .overview-header h1 {
+            margin: 50px 0;
+            font-size: 2.5rem;
+            color: var(--tpl-blue);
+        }
 
-        /* KPI Cards in one line */
-        .kpi-row {
+        /* 4 Pillars - Forced into one line */
+        .pillars-row {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            max-width: 1200px;
-            margin: 0 auto 80px auto;
+            gap: 20px;
+            margin-bottom: 60px;
+            padding: 0 20px;
         }
 
-        .kpi-card {
+        .pillar-card {
             flex: 1;
+            min-width: 200px;
+            max-width: 300px;
             padding: 20px;
             border: 1px solid #ddd;
-            border-top: 4px solid #E31837;
-            background: #fcfcfc;
+            border-top: 5px solid var(--tpl-blue);
+            background: #f9f9f9;
         }
 
-        /* Spacing and Centralization for Charts */
-        .section-title { margin-top: 100px; font-size: 2rem; }
-        
+        /* Spacing for sections */
+        .section-container {
+            margin-top: 100px; /* Large spacing to see text clearly */
+            padding: 0 50px;
+        }
+
+        /* 2x2 Grid for Trends */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            max-width: 1200px;
-            margin: 40px auto;
+            gap: 30px;
+            margin-top: 40px;
         }
 
-        .chart-container { height: 450px; width: 100%; border: 1px solid #eee; }
-        
-        #heatmap-viz { 
-            height: 600px; 
-            max-width: 1200px; 
-            margin: 40px auto 100px auto; 
+        .chart-box {
+            height: 450px; /* Required for Plotly to render */
+            border: 1px solid #eee;
+        }
+
+        #heatmap-viz {
+            height: 600px;
+            margin-top: 40px;
             border: 1px solid #eee;
         }
     </style>
 </head>
 <body>
 
-<div class="header-section">
+<header class="overview-header">
     <h1>libTO Overview</h1>
+</header>
+
+<main>
+    <section class="pillars-row">
+        <div class="pillar-card">
+            <h3>Total Libraries</h3>
+            <p class="kpi-value"><b>{{ kpis.count }}</b></p>
+        </div>
+        <div class="pillar-card">
+            <h3>Avg Sq Footage</h3>
+            <p class="kpi-value"><b>{{ kpis.avg_sq_ft }}</b></p>
+        </div>
+        <div class="pillar-card">
+            <h3>Avg Workstations</h3>
+            <p class="kpi-value"><b>{{ kpis.avg_ws }}</b></p>
+        </div>
+        <div class="pillar-card">
+            <h3>Oldest Branch</h3>
+            <p class="kpi-value"><b>{{ kpis.oldest }}</b></p>
+        </div>
+    </section>
+
+    <div class="section-container">
+        <h2>System Trends</h2>
+        <div class="charts-grid">
+            <div id="chart-reg" class="chart-box"></div>
+            <div id="chart-circ" class="chart-box"></div>
+            <div id="chart-visits" class="chart-box"></div>
+            <div id="chart-ws" class="chart-box"></div>
+        </div>
     </div>
 
-<div class="kpi-row">
-    <div class="kpi-card"><h3>Total Libraries</h3><p>{{ kpis.count }}</p></div>
-    <div class="kpi-card"><h3>Avg Sq Ft</h3><p>{{ kpis.avg_sq_ft }}</p></div>
-    <div class="kpi-card"><h3>Avg Workstations</h3><p>{{ kpis.avg_ws }}</p></div>
-    <div class="kpi-card"><h3>Oldest Branch</h3><p>{{ kpis.oldest }}</p></div>
-</div>
-
-<h2 class="section-title">System Trends</h2>
-<div class="charts-grid">
-    <div id="reg"></div>
-    <div id="circ"></div>
-    <div id="visits"></div>
-    <div id="ws"></div>
-</div>
-
-<h2 class="section-title">Square Footage Heatmap</h2>
-<div id="heatmap-viz"></div>
+    <div class="section-container" style="margin-bottom: 100px;">
+        <h2>Square Footage Heatmap</h2>
+        <div id="heatmap-viz"></div>
+    </div>
+</main>
 
 <script>
-    // Explicitly parsing the JSON and targeting IDs
-    const config = {responsive: true};
-    Plotly.newPlot('reg', {{ charts.reg | safe }}, config);
-    Plotly.newPlot('circ', {{ charts.circ | safe }}, config);
-    Plotly.newPlot('visits', {{ charts.visits | safe }}, config);
-    Plotly.newPlot('ws', {{ charts.ws | safe }}, config);
-    Plotly.newPlot('heatmap-viz', {{ heatmap | safe }}, config);
+    // Configuration to make charts responsive
+    const config = { responsive: true };
+
+    // The JSON.parse( ... | safe ) pattern is the most reliable way to load Plotly data
+    try {
+        const dataReg = JSON.parse('{{ charts.reg | safe }}');
+        const dataCirc = JSON.parse('{{ charts.circ | safe }}');
+        const dataVisits = JSON.parse('{{ charts.visits | safe }}');
+        const dataWS = JSON.parse('{{ charts.ws | safe }}');
+        const dataHeatmap = JSON.parse('{{ heatmap | safe }}');
+
+        Plotly.newPlot('chart-reg', dataReg.data, dataReg.layout, config);
+        Plotly.newPlot('chart-circ', dataCirc.data, dataCirc.layout, config);
+        Plotly.newPlot('chart-visits', dataVisits.data, dataVisits.layout, config);
+        Plotly.newPlot('chart-ws', dataWS.data, dataWS.layout, config);
+        Plotly.newPlot('heatmap-viz', dataHeatmap.data, dataHeatmap.layout, config);
+    } catch (err) {
+        console.error("Plotly Rendering Error:", err);
+    }
 </script>
 
 </body>
