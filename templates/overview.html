@@ -6,134 +6,81 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>libTO | Overview</title>
     <style>
-        /* Specific overrides for this page */
-        .overview-header {
-            text-align: center;
-            padding: 60px 0 20px;
+        body { text-align: center; font-family: sans-serif; }
+        
+        .header-section { margin: 60px 0; }
+        .header-section h1 { font-size: 3rem; color: #007FA3; }
+
+        /* KPI Cards in one line */
+        .kpi-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto 80px auto;
         }
 
-        .overview-header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin: 0;
+        .kpi-card {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: 4px solid #E31837;
+            background: #fcfcfc;
         }
 
-        /* 4 Pillars in one line */
-        .pillars-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            text-align: center;
-            margin: 80px 0 40px;
-            font-size: 2rem;
-            font-weight: 700;
-            clear: both;
-        }
-
-        /* Grid for 2x2 charts */
+        /* Spacing and Centralization for Charts */
+        .section-title { margin-top: 100px; font-size: 2rem; }
+        
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
-            max-width: 1400px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
+            max-width: 1200px;
+            margin: 40px auto;
         }
 
-        .chart-box {
-            min-height: 450px;
-            background: #ffffff;
-            border: 1px solid #eee;
-            padding: 10px;
-        }
-
-        .heatmap-container {
-            max-width: 1400px;
-            margin: 0 auto 100px;
-            padding: 0 20px;
-        }
-
-        #heatmap-viz {
-            height: 600px;
-            width: 100%;
+        .chart-container { height: 450px; width: 100%; border: 1px solid #eee; }
+        
+        #heatmap-viz { 
+            height: 600px; 
+            max-width: 1200px; 
+            margin: 40px auto 100px auto; 
             border: 1px solid #eee;
         }
     </style>
 </head>
-<body class="light-theme">
+<body>
 
-<header class="overview-header">
-    <h1>Overview</h1>
-</header>
+<div class="header-section">
+    <h1>libTO Overview</h1>
+    </div>
 
-<main>
-    <section class="pillars-row">
-        <div class="pillar-card">
-            
-            <h2 style="text-align: center;"># of Libraries</h2>
-            
-            <p class="kpi-value" style="text-align: center; font-size: 2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.count }}</p>
-        </div>
-        <div class="pillar-card">
-            
-            <h2 style="text-align: center;">Avg. Sq. Footage</h2>
-            
-            <p class="kpi-value" style="text-align: center; font-size: 2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.avg_sq_ft }}</p>
-        </div>
-        <div class="pillar-card">
-            
-            <h2 style="text-align: center;">Avg. Workstations</h2>
-            
-            <p class="kpi-value" style="text-align: center; font-size: 2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.avg_ws }}</p>
-        </div>
-        <div class="pillar-card">
-            
-            <h2 style="text-align: center;">Oldest Branch</h2>
-            
-            <p class="kpi-value" style="text-align: center; font-size: 2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.oldest }}</p>
-        </div>
-    </section>
+<div class="kpi-row">
+    <div class="kpi-card"><h3>Total Libraries</h3><p>{{ kpis.count }}</p></div>
+    <div class="kpi-card"><h3>Avg Sq Ft</h3><p>{{ kpis.avg_sq_ft }}</p></div>
+    <div class="kpi-card"><h3>Avg Workstations</h3><p>{{ kpis.avg_ws }}</p></div>
+    <div class="kpi-card"><h3>Oldest Branch</h3><p>{{ kpis.oldest }}</p></div>
+</div>
 
-    <h2 class="section-title">System Trends</h2>
-    <section class="charts-grid">
-        <div id="chart-reg" class="chart-box"></div>
-        <div id="chart-circ" class="chart-box"></div>
-        <div id="chart-visits" class="chart-box"></div>
-        <div id="chart-ws" class="chart-box"></div>
-    </section>
+<h2 class="section-title">System Trends</h2>
+<div class="charts-grid">
+    <div id="reg"></div>
+    <div id="circ"></div>
+    <div id="visits"></div>
+    <div id="ws"></div>
+</div>
 
-    <h2 class="section-title">Square Footage Heatmap</h2>
-    <section class="heatmap-container">
-        <div id="heatmap-viz"></div>
-    </section>
-</main>
+<h2 class="section-title">Square Footage Heatmap</h2>
+<div id="heatmap-viz"></div>
 
 <script>
-    // Configuration to make charts responsive
-    const config = { responsive: true };
-
-    // The JSON.parse( ... | safe ) pattern is the most reliable way to load Plotly data
-    try {
-        const dataReg = JSON.parse('{{ charts.reg | safe }}');
-        const dataCirc = JSON.parse('{{ charts.circ | safe }}');
-        const dataVisits = JSON.parse('{{ charts.visits | safe }}');
-        const dataWS = JSON.parse('{{ charts.ws | safe }}');
-        const dataHeatmap = JSON.parse('{{ heatmap | safe }}');
-
-        Plotly.newPlot('chart-reg', dataReg.data, dataReg.layout, config);
-        Plotly.newPlot('chart-circ', dataCirc.data, dataCirc.layout, config);
-        Plotly.newPlot('chart-visits', dataVisits.data, dataVisits.layout, config);
-        Plotly.newPlot('chart-ws', dataWS.data, dataWS.layout, config);
-        Plotly.newPlot('heatmap-viz', dataHeatmap.data, dataHeatmap.layout, config);
-    } catch (err) {
-        console.error("Plotly Rendering Error:", err);
-    }
+    // Explicitly parsing the JSON and targeting IDs
+    const config = {responsive: true};
+    Plotly.newPlot('reg', {{ charts.reg | safe }}, config);
+    Plotly.newPlot('circ', {{ charts.circ | safe }}, config);
+    Plotly.newPlot('visits', {{ charts.visits | safe }}, config);
+    Plotly.newPlot('ws', {{ charts.ws | safe }}, config);
+    Plotly.newPlot('heatmap-viz', {{ heatmap | safe }}, config);
 </script>
 
 </body>
