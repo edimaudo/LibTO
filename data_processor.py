@@ -76,7 +76,7 @@ class DataProcessor:
             trend = df.groupby('Year')[col].sum().reset_index()
             fig = px.bar(trend, x='Year', y=col, title=title, color_discrete_sequence=['#007FA3'])
             fig.update_layout(template="plotly_white", title_font_size=20,title_x=0.5,height=500, margin=dict(l=20, r=20, t=40, b=20))
-            charts[key] = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+            charts[key] = json.loads(fig.to_json()) #charts[key] = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
         
         return charts
 
@@ -91,5 +91,5 @@ class DataProcessor:
             mapbox_style="carto-positron",
             title="Toronto Library Square Footage Heatmap"
         )
-        fig.update_layout(margin=dict(l=0, r=0, t=40, b=0))
-        return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        fig.update_layout(title_font_size=20,title_x=0.5,height=500,margin=dict(l=0, r=0, t=40, b=0))
+        return json.loads(fig.to_json())#json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
