@@ -85,7 +85,7 @@ class DataProcessor:
         geo_df = df[df['PhysicalBranch'] != 0].copy()
         
         fig = px.density_mapbox(
-            geo_df, lat='lat', lon='lon', z='SquareFootage', 
+            geo_df, lat='Lat', lon='Long', z='SquareFootage', 
             radius=15, zoom=10, 
             center=dict(lat=43.7, lon=-79.35),
             mapbox_style="carto-positron",
