@@ -6,16 +6,23 @@ import plotly.utils
 
 class DataProcessor:
     def __init__(self):
-        base_path = os.path.join(os.path.dirname(__file__), 'data')
-        
-        self.branch_info = pd.read_csv(os.path.join(base_path, 'tpl-branch-general-information-2023.csv'))
-        self.branch_visits = pd.read_csv(os.path.join(base_path, 'tpl-visits-annual-by-branch.csv'))
-        self.branch_space_rental = pd.read_csv(os.path.join(base_path, 'tpl-branch-space-rentals-2024.csv'))
-        self.branch_registration = pd.read_csv(os.path.join(base_path, 'tpl-card-registrations-annual-by-branch.csv'))
-        self.branch_circulation = pd.read_csv(os.path.join(base_path, 'tpl-circulation-annual-by-branch.csv'))
-        self.branch_workstation = pd.read_csv(os.path.join(base_path, 'tpl-workstation-usage-annual-by-branch.csv'))
-        self.neighbourhoods = pd.read_csv(os.path.join(base_path, 'Neighbourhoods.csv'))
+            base_path = os.path.join(os.path.dirname(__file__), 'data')
+            
+            # Load and clean once
+            self.branch_info = self._load_and_clean(os.path.join(base_path, 'tpl-branch-general-information-2023.csv'), 'SquareFootage')
+            self.branch_visits = self._load_and_clean(os.path.join(base_path, 'tpl-visits-annual-by-branch.csv'), 'Visits')
+            self.branch_registration = self._load_and_clean(os.path.join(base_path, 'tpl-card-registrations-annual-by-branch.csv'), 'Registrations')
+            self.branch_circulation = self._load_and_clean(os.path.join(base_path, 'tpl-circulation-annual-by-branch.csv'), 'Circulation')
+            self.branch_workstation = self._load_and_clean(os.path.join(base_path, 'tpl-workstation-usage-annual-by-branch.csv'), 'Sessions')
+            self.branch_space_rental = pd.read_csv(os.path.join(base_path, 'tpl-branch-space-rentals-2024.csv'))
+            self.neighbourhoods = pd.read_csv(os.path.join(base_path, 'Neighbourhoods.csv'))
 
+    def _load_and_clean(self, path, col):
+        df = pd.read_csv(path)
+        # Clean numeric columns immediately on load
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', ''), errors='coerce').fillna(0)
+        return df
         
     def get_branch_list(self):
         # Returns alphabetical list of branches for the dropdown
@@ -57,28 +64,21 @@ class DataProcessor:
             }
 
     def get_trend_charts(self):
-        # Load trend datasets
-        df_reg = self.branch_registration
-        df_circ = self.branch_circulation
-        df_visits = self.branch_visits
-        df_ws = self.branch_workstation
-
-        # Grouping logic from your .ipynb
-        charts = {}
-        data_map = {
-            "reg": (df_reg, "Registrations", "Annual Registrations"),
-            "circ": (df_circ, "Circulation", "Annual Circulation"),
-            "visits": (df_visits, "Visits", "Annual Visits"),
-            "ws": (df_ws, "Sessions", "Workstation Usage")
-        }
-
-        for key, (df, col, title) in data_map.items():
-            trend = df.groupby('Year')[col].sum().reset_index()
-            fig = px.bar(trend, x='Year', y=col, title=title, color_discrete_sequence=['#007FA3'])
-            fig.update_layout(template="plotly_white", title_font_size=20,title_x=0.5,height=500, margin=dict(l=20, r=20, t=40, b=20))
-            charts[key] = json.loads(fig.to_json()) #charts[key] = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        
-        return charts
+            charts = {}
+            data_map = {
+                "reg": (self.branch_registration, "Registrations", "Annual Registrations"),
+                "circ": (self.branch_circulation, "Circulation", "Annual Circulation"),
+                "visits": (self.branch_visits, "Visits", "Annual Visits"),
+                "ws": (self.branch_workstation, "Sessions", "Workstation Usage")
+            }
+    
+            for key, (df, col, title) in data_map.items():
+                trend = df.groupby('Year')[col].sum().reset_index()
+                fig = px.bar(trend, x='Year', y=col, title=title, color_discrete_sequence=['#007FA3'])
+                fig.update_layout(template="plotly_white", title_x=0.5, height=450)
+                charts[key] = json.loads(fig.to_json())
+            
+            return charts
 
     def get_heatmap(self):
         df = self.branch_info
