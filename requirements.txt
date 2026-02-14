@@ -6,7 +6,7 @@ python-multipart==0.0.9
 
 # Data Processing & Visualization
 pandas>=2.2.0
-plotly>=5.18.0
+plotly>=6.5.1
 
 # AI Integration (DigitalOcean Gradient)
 gradientai>=1.4.0
