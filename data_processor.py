@@ -49,7 +49,7 @@ class DataProcessor:
             # Handle established year if it's a string too
             physical['PresentSiteYear'] = pd.to_numeric(physical['PresentSiteYear'], errors='coerce')
             oldest = physical.sort_values('PresentSiteYear').iloc[0]
-            oldest_info = f"{oldest['BranchName']} ({int(oldest['Established'])})"
+            oldest_info = f"{oldest['BranchName']} ({int(oldest['PresentSiteYear'])})"
     
             return {
                 "count": num_libraries,
