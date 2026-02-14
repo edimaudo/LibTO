@@ -6,7 +6,6 @@ import plotly.utils
 
 class DataProcessor:
     def __init__(self):
-        # Use absolute paths to avoid issues during deployment
         base_path = os.path.join(os.path.dirname(__file__), 'data')
         
         self.branch_info = pd.read_csv(os.path.join(base_path, 'tpl-branch-general-information-2023.csv'))
@@ -46,7 +45,6 @@ class DataProcessor:
             avg_sq_ft = physical['SquareFootage'].mean()
             avg_ws = physical['Workstations'].mean()
 
-            # Handle established year if it's a string too
             physical['PresentSiteYear'] = pd.to_numeric(physical['PresentSiteYear'], errors='coerce')
             oldest = physical.sort_values('PresentSiteYear').iloc[0]
             oldest_info = f"{oldest['BranchName']} ({int(oldest['PresentSiteYear'])})"
