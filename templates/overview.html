@@ -5,35 +5,94 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>libTO | Overview</title>
+    <style>
+        /* Specific overrides for this page */
+        .overview-header {
+            text-align: center;
+            padding: 60px 0 20px;
+        }
+
+        .overview-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        /* 4 Pillars in one line */
+        .pillars-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 80px 0 40px;
+            font-size: 2rem;
+            font-weight: 700;
+            clear: both;
+        }
+
+        /* Grid for 2x2 charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        .chart-box {
+            min-height: 450px;
+            background: #ffffff;
+            border: 1px solid #eee;
+            padding: 10px;
+        }
+
+        .heatmap-container {
+            max-width: 1400px;
+            margin: 0 auto 100px;
+            padding: 0 20px;
+        }
+
+        #heatmap-viz {
+            height: 600px;
+            width: 100%;
+            border: 1px solid #eee;
+        }
+    </style>
 </head>
 <body class="light-theme">
 
-<header>
-    <h1>libTO Overview</h1>
-    <nav><a href="/">Back to Home</a></nav>
+<header class="overview-header">
+    <h1>Overview</h1>
 </header>
 
-<main class="container">
-    <section class="pillars-container" style="margin-top: 40px;">
+<main>
+    <section class="pillars-row">
         <div class="pillar-card">
             <div class="accent-bar"></div>
-            <h2>Total Libraries</h2>
-            <p class="kpi-value">{{ kpis.count }}</p>
+            <h2 style="text-align: center;">Total Libraries</h2>
+            <p class="kpi-value" style="text-align: center; font-size: 2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.count }}</p>
         </div>
         <div class="pillar-card">
             <div class="accent-bar"></div>
-            <h2>Avg Sq Footage</h2>
-            <p class="kpi-value">{{ kpis.avg_sq_ft }} sq ft</p>
+            <h2 style="text-align: center;">Avg Sq Footage</h2>
+            <p class="kpi-value" style="text-align: center; font-size: 2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.avg_sq_ft }}</p>
         </div>
         <div class="pillar-card">
             <div class="accent-bar"></div>
-            <h2>Avg Workstations</h2>
-            <p class="kpi-value">{{ kpis.avg_ws }}</p>
+            <h2 style="text-align: center;">Avg Workstations</h2>
+            <p class="kpi-value" style="text-align: center; font-size: 2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.avg_ws }}</p>
         </div>
         <div class="pillar-card">
             <div class="accent-bar"></div>
-            <h2>Oldest Branch</h2>
-            <p class="kpi-value">{{ kpis.oldest }}</p>
+            <h2 style="text-align: center;">Oldest Branch</h2>
+            <p class="kpi-value" style="text-align: center; font-size: 1.2rem; font-weight: bold; color: var(--tpl-accent-blue);">{{ kpis.oldest }}</p>
         </div>
     </section>
 
@@ -47,17 +106,23 @@
 
     <h2 class="section-title">Square Footage Heatmap</h2>
     <section class="heatmap-container">
-        <div id="heatmap-viz" style="height: 600px; border: 1px solid #eee;"></div>
+        <div id="heatmap-viz"></div>
     </section>
 </main>
 
 <script>
-    // Rendering the JSON data from FastAPI
-    Plotly.newPlot('chart-reg', {{ charts.reg | safe }});
-    Plotly.newPlot('chart-circ', {{ charts.circ | safe }});
-    Plotly.newPlot('chart-visits', {{ charts.visits | safe }});
-    Plotly.newPlot('chart-ws', {{ charts.ws | safe }});
-    Plotly.newPlot('heatmap-viz', {{ heatmap | safe }});
+    // Ensure data exists before plotting
+    const graphConfig = { responsive: true, displayModeBar: false };
+    
+    try {
+        Plotly.newPlot('chart-reg', {{ charts.reg | safe }}, graphConfig);
+        Plotly.newPlot('chart-circ', {{ charts.circ | safe }}, graphConfig);
+        Plotly.newPlot('chart-visits', {{ charts.visits | safe }}, graphConfig);
+        Plotly.newPlot('chart-ws', {{ charts.ws | safe }}, graphConfig);
+        Plotly.newPlot('heatmap-viz', {{ heatmap | safe }}, { responsive: true });
+    } catch (e) {
+        console.error("Plotly Error:", e);
+    }
 </script>
 
 </body>
