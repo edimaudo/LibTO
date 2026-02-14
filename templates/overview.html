@@ -111,17 +111,24 @@
 </main>
 
 <script>
-    // Ensure data exists before plotting
-    const graphConfig = { responsive: true, displayModeBar: false };
-    
+    // Configuration to make charts responsive
+    const config = { responsive: true };
+
+    // The JSON.parse( ... | safe ) pattern is the most reliable way to load Plotly data
     try {
-        Plotly.newPlot('chart-reg', {{ charts.reg | safe }}, graphConfig);
-        Plotly.newPlot('chart-circ', {{ charts.circ | safe }}, graphConfig);
-        Plotly.newPlot('chart-visits', {{ charts.visits | safe }}, graphConfig);
-        Plotly.newPlot('chart-ws', {{ charts.ws | safe }}, graphConfig);
-        Plotly.newPlot('heatmap-viz', {{ heatmap | safe }}, { responsive: true });
-    } catch (e) {
-        console.error("Plotly Error:", e);
+        const dataReg = JSON.parse('{{ charts.reg | safe }}');
+        const dataCirc = JSON.parse('{{ charts.circ | safe }}');
+        const dataVisits = JSON.parse('{{ charts.visits | safe }}');
+        const dataWS = JSON.parse('{{ charts.ws | safe }}');
+        const dataHeatmap = JSON.parse('{{ heatmap | safe }}');
+
+        Plotly.newPlot('chart-reg', dataReg.data, dataReg.layout, config);
+        Plotly.newPlot('chart-circ', dataCirc.data, dataCirc.layout, config);
+        Plotly.newPlot('chart-visits', dataVisits.data, dataVisits.layout, config);
+        Plotly.newPlot('chart-ws', dataWS.data, dataWS.layout, config);
+        Plotly.newPlot('heatmap-viz', dataHeatmap.data, dataHeatmap.layout, config);
+    } catch (err) {
+        console.error("Plotly Rendering Error:", err);
     }
 </script>
 
