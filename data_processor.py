@@ -52,7 +52,7 @@ class DataProcessor:
             return {
                 "count": num_libraries,
                 "avg_sq_ft": f"{avg_sq_ft:,.0f}",
-                "avg_ws": round(avg_ws, 0),
+                "avg_ws": int(avg_ws),
                 "oldest": oldest_info
             }
 
