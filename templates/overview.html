@@ -109,25 +109,27 @@
     <h2>Square Footage Heatmap</h2>
     <div id="heatmap-viz"></div>
 
-    <script>
-        const config = { responsive: true };
+<script>
+    const config = { responsive: true, displayModeBar: false };
 
-        // Helper to safely parse and plot
-        function renderPlot(id, jsonData) {
-            try {
-                const parsedData = JSON.parse(jsonData);
-                Plotly.newPlot(id, parsedData.data, parsedData.layout, config);
-            } catch (e) {
-                console.error("Error rendering " + id, e);
-            }
+    // 1. We create a helper to handle the specific structure of the Plotly object
+    function plotGraph(divId, pythonData) {
+        // pythonData is now a valid JS object thanks to | tojson
+        if (pythonData) {
+            Plotly.newPlot(divId, pythonData.data, pythonData.layout, config);
         }
+    }
 
-        renderPlot('reg', '{{ charts.reg | safe }}');
-        renderPlot('circ', '{{ charts.circ | safe }}');
-        renderPlot('visits', '{{ charts.visits | safe }}');
-        renderPlot('ws', '{{ charts.ws | safe }}');
-        renderPlot('heatmap-viz', '{{ heatmap | safe }}');
-    </script>
+    // 2. Call the function using the | tojson filter
+    // DO NOT use quotes around the curly braces
+    plotGraph('reg', {{ charts.reg | tojson }});
+    plotGraph('circ', {{ charts.circ | tojson }});
+    plotGraph('visits', {{ charts.visits | tojson }});
+    plotGraph('ws', {{ charts.ws | tojson }});
+    
+    // Heatmap often comes as a full figure object too
+    plotGraph('heatmap-viz', {{ heatmap | tojson }});
+</script>
 
 </body>
 </html>
