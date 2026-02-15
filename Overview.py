@@ -19,7 +19,7 @@ adult_literacy = f"{physical['AdultLiteracyProgram'].sum():.0f}"
 top_container = st.container()
 bottom_container = st.container()
 with top_container:
-    st.subheader("TPL Branch Overview")
+    st.subheader("TPL Branch Information")
     col1, col2,col3 = st.columns(3)
     with col1:
         st.metric(label="No. of Branches", value=num_libraries)
@@ -36,9 +36,53 @@ with top_container:
 
         
 with bottom_container:
-    st.subheader("TPL Trends")
-    tab1, tab2 = st.tabs(["Trends",'Size Heatmap'])
+    st.subheader("TPL Size & Trends")
+    tab1, tab2 = st.tabs(['Size Heatmap',"Trends"])
     with tab1:
+        df_merged_geo = pd.merge(
+            physical,
+            neighborhood,
+            left_on='NBHDNo',
+            right_on='AREA_ID',
+            how='left'
+        )
+
+        df_map_data = df_merged_geo
+        df_map_data.dropna(subset=['Lat', 'Long'], inplace=True)
+
+        # UPDATED: Use scatter_map
+        fig_heatmap = px.scatter_map(
+            df_map_data,
+            lat="Lat",
+            lon="Long",
+            size="SquareFootage",
+            color="SquareFootage",
+            hover_name="BranchName",
+            hover_data={
+                "Address": True,
+                "SquareFootage": ':,.0f',
+                "Lat": False,
+                "Long": False
+            },
+            labels={"SquareFootage": "Sq. Ft"},
+            color_continuous_scale=px.colors.sequential.Plasma,
+            zoom=10,
+            center={"lat": 43.7, "lon": -79.4},
+            # UPDATED: map_style instead of mapbox_style
+            map_style="carto-positron", 
+            title="TPL Branches by Square Footage"
+        )
+
+        # UPDATED: margin and title layout remains the same
+        fig_heatmap.update_layout(
+            title_font_size=18,
+            title_x=0.4,
+            template='plotly_white',
+            margin={"r":0,"t":50,"l":0,"b":0}
+        )
+        st.plotly_chart(fig_heatmap)
+
+    with tab2:
         # 1. Card Registrations
         df_card_registrations = registration
         annual_registrations = df_card_registrations.groupby('Year')['Registrations'].sum().reset_index()
@@ -118,40 +162,4 @@ with bottom_container:
             st.plotly_chart(fig_visits)
             st.plotly_chart( fig_workstation_usage)
 
-    with tab2:
-        df_merged_geo = pd.merge(
-            physical,
-            neighborhood,
-            left_on='NBHDNo',
-            right_on='AREA_ID',
-            how='left'
-        )
-
-        df_map_data = df_merged_geo
-        df_map_data.dropna(subset=['Lat', 'Long'], inplace=True)
-
-        fig_heatmap = px.scatter_mapbox(
-            df_map_data,
-            lat="Lat",
-            lon="Long",
-            size="SquareFootage", # Size of markers based on SquareFootage for heatmap effect
-            color="SquareFootage", # Color markers based on SquareFootage
-            hover_name="BranchName",
-            hover_data={
-                "Address": True,
-                "SquareFootage": ':,.0f',
-                "Lat": False,
-                "Long": False # Hide Lat/Long from hover data
-            },
-            labels={"SquareFootage": "Sq. Ft"},
-            
-            color_continuous_scale=px.colors.sequential.Plasma, # Choose a color scale
-            zoom=10, # Adjust zoom level to show Toronto area
-            center={"lat": 43.7, "lon": -79.4},
-            mapbox_style="carto-positron", # Use a clear map style
-            title="TPL Branches by Square Footage"
-        )
-
-        fig_heatmap.update_layout(title_font_size=18,title_x=0.4,template='plotly_white',
-                                  margin={"r":0,"t":50,"l":0,"b":0})
-        st.plotly_chart(fig_heatmap)
+    
