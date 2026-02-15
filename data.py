@@ -19,7 +19,16 @@ space_rental = load_data(path + "tpl-branch-space-rentals-2024.csv")
 neighborhood = load_data(path + "Neighbourhoods.csv")
 
 
-        
-
+# physical branches        
+physical = branch_info[branch_info['PhysicalBranch'] != 0]
+physical['SquareFootage'] = pd.to_numeric(physical['SquareFootage'].astype(str).str.replace(',', ''), errors='coerce')      
+physical['Workstations'] = pd.to_numeric(physical['Workstations'], errors='coerce')
+physical['KidsStop'] = pd.to_numeric(physical['KidsStop'], errors='coerce')
+physical['LeadingReading'] = pd.to_numeric(physical['LeadingReading'], errors='coerce')
+physical['TeenCouncil'] = pd.to_numeric(physical['TeenCouncil'], errors='coerce')
+physical['YouthHub'] = pd.to_numeric(physical['YouthHub'], errors='coerce')
+physical['AdultLiteracyProgram'] = pd.to_numeric(physical['AdultLiteracyProgram'], errors='coerce')
+physical['PresentSiteYear'] = pd.to_numeric(physical['PresentSiteYear'], errors='coerce')
+oldest = physical.sort_values('PresentSiteYear').iloc[0]
 
 
