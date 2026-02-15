@@ -4,19 +4,6 @@ from data import *
 st.title(APP_NAME)
 st.header(OVERVIEW_HEADER)
 
-## Data setup
-df = branch_info
-physical = df[df['PhysicalBranch'] != 0]
-physical['SquareFootage'] = pd.to_numeric(physical['SquareFootage'].astype(str).str.replace(',', ''), errors='coerce')      
-physical['Workstations'] = pd.to_numeric(physical['Workstations'], errors='coerce')
-physical['KidsStop'] = pd.to_numeric(physical['KidsStop'], errors='coerce')
-physical['LeadingReading'] = pd.to_numeric(physical['LeadingReading'], errors='coerce')
-physical['TeenCouncil'] = pd.to_numeric(physical['TeenCouncil'], errors='coerce')
-physical['YouthHub'] = pd.to_numeric(physical['YouthHub'], errors='coerce')
-physical['AdultLiteracyProgram'] = pd.to_numeric(physical['AdultLiteracyProgram'], errors='coerce')
-physical['PresentSiteYear'] = pd.to_numeric(physical['PresentSiteYear'], errors='coerce')
-oldest = physical.sort_values('PresentSiteYear').iloc[0]
-
 # Calculate KPIs
 num_libraries = len(physical)
 avg_sq_ft = f"{physical['SquareFootage'].mean():,.0f}"
@@ -132,4 +119,39 @@ with bottom_container:
             st.plotly_chart( fig_workstation_usage)
 
     with tab2:
-        pass
+        df_merged_geo = pd.merge(
+            physical,
+            neighborhood,
+            left_on='NBHDNo',
+            right_on='AREA_ID',
+            how='left'
+        )
+
+        df_map_data = df_merged_geo
+        df_map_data.dropna(subset=['Lat', 'Long'], inplace=True)
+
+        fig_heatmap = px.scatter_mapbox(
+            df_map_data,
+            lat="Lat",
+            lon="Long",
+            size="SquareFootage", # Size of markers based on SquareFootage for heatmap effect
+            color="SquareFootage", # Color markers based on SquareFootage
+            hover_name="BranchName",
+            hover_data={
+                "Address": True,
+                "SquareFootage": ':,.0f',
+                "Lat": False,
+                "Long": False # Hide Lat/Long from hover data
+            },
+            labels={"SquareFootage": "Sq. Ft"},
+            
+            color_continuous_scale=px.colors.sequential.Plasma, # Choose a color scale
+            zoom=10, # Adjust zoom level to show Toronto area
+            center={"lat": 43.7, "lon": -79.4},
+            mapbox_style="carto-positron", # Use a clear map style
+            title="TPL Branches by Square Footage"
+        )
+
+        fig_heatmap.update_layout(title_font_size=18,title_x=0.4,template='plotly_white',
+                                  margin={"r":0,"t":50,"l":0,"b":0})
+        st.plotly_chart(fig_heatmap)
