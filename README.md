@@ -5,7 +5,6 @@ By leveraging Toronto Open Data and DigitalOcean Gradient AI, libTO allows deniz
 ## Key Features
 ### Overview
 A high-level overview of the Toronto Public Library System
-- Library Agent for asking questions about high level information about the TPL network
 
 ### Branch Intelligence
 Library Operations: Ask questions about library operations + understand how library branches have changed overtime
