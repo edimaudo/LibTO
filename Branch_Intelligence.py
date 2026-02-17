@@ -44,12 +44,14 @@ with middle_container:
 with bottom_container:
     option = st.selectbox("Options",("Trends", "Forecasts", "Branch Agent"),)
     branch_code = branch_df['BranchCode'][0]
-
+    branch_registrations = registration[registration['BranchCode'] == branch_code] 
+    branch_circulation = circulation[circulation['BranchCode'] == branch_code]
+    branch_visits = visits[visits['BranchCode'] == branch_code]
+    branch_workstation_usage = workstation[workstation['BranchCode'] == branch_code]
     if option == "Trends":
         if len(branch_code) > 0:
             col1, col2 = st.columns(2)
-            
-            branch_registrations = registration[registration['BranchCode'] == branch_code]            
+
             fig_registrations_branch = create_branch_bar_chart(
                 branch_registrations,
                 x_col='Year',
@@ -57,8 +59,6 @@ with bottom_container:
                 title=f'Annual Card Registrations for {branch_option}',
                 y_label='Total Card Registrations'
             )
-
-            branch_circulation = circulation[circulation['BranchCode'] == branch_code]
             fig_circulation_branch = create_branch_bar_chart(
                 branch_circulation,
                 x_col='Year',
@@ -66,8 +66,6 @@ with bottom_container:
                 title=f'Annual Circulation for {branch_option}',
                 y_label='Total Circulations'
             )
-
-            branch_visits = visits[visits['BranchCode'] == branch_code]
             fig_visits_branch = create_branch_bar_chart(
                 branch_visits,
                 x_col='Year',
@@ -75,8 +73,6 @@ with bottom_container:
                 title=f'Annual Visits for {branch_option}',
                 y_label='Total Visits'
             )
-
-            branch_workstation_usage = workstation[workstation['BranchCode'] == branch_code]
             fig_workstation_usage_branch = create_branch_bar_chart(
                 branch_workstation_usage,
                 x_col='Year',
@@ -84,7 +80,6 @@ with bottom_container:
                 title=f'Annual Workstation Usage for {branch_option}',
                 y_label='Total Sessions'
             )
-
             with col1:
                 st.plotly_chart(fig_registrations_branch)
                 st.plotly_chart(fig_circulation_branch)
@@ -93,12 +88,65 @@ with bottom_container:
                 st.plotly_chart(fig_workstation_usage_branch)
         else:
             print(f"Branch '{branch_df['BranchName'][0]}' not found.")
-    elif option == "Forecast":
+    
+    elif option == "Forecasts":
+        forecast_horizon = st.sidebar.slider("Forecast Horizon (Years)",1,5)
         col1, col2 = st.columns(2)
+        
+        # --- Registrations ---
+        reg_df = prepare_time_series(branch_registrations, 'Registrations')
+        reg_forecast_index, reg_forecast_values, _ = forecast_series(reg_df['Registrations'],forecast_horizon)
+        registration_forecast = plot_forecast(
+        reg_df,
+        'Registrations',
+        reg_forecast_index,
+        reg_forecast_values,
+        title=f'Annual Card Registrations Forecast for {branch_option}',
+        y_label='Registrations'
+        )
+        
+        # --- Visits ---
+        visits_df = prepare_time_series(branch_visits, 'Visits')
+        visits_forecast_index, visits_forecast_values, _ = forecast_series(visits_df['Visits'],forecast_horizon)
+        visits_forecast = plot_forecast(
+        visits_df,
+        'Visits',
+        visits_forecast_index,
+        visits_forecast_values,
+        title=f'Annual Card Visits Forecast for {branch_option}',
+        y_label='Visits'
+        )
+
+        # --- Circulations ---
+        circ_df = prepare_time_series(branch_circulation, 'Circulation')
+        circ_forecast_index, circ_forecast_values, _ = forecast_series(circ_df['Circulation'],forecast_horizon)
+        circulation_forecast = plot_forecast(
+        circ_df,
+        'Circulation',
+        circ_forecast_index,
+        circ_forecast_values,
+        title=f'Annual Circulation Forecast for {branch_option}',
+        y_label='Circulation'
+        )
+        
+        # --- Workstation Usage ---
+        ws_df = prepare_time_series(branch_workstation_usage, 'Sessions')
+        ws_forecast_index, ws_forecast_values, _ = forecast_series(ws_df['Sessions'],forecast_horizon)
+        workstation_forecast = plot_forecast(
+        ws_df,
+        'Sessions',
+        ws_forecast_index,
+        ws_forecast_values,
+        title=f'Annual Workstation Usage Forecast for {branch_option}',
+        y_label='Sessions'
+        )
+
         with col1:
-            pass
+            st.plotly_chart(registration_forecast)
+            st.plotly_chart(circulation_forecast)
         with col2:
-            pass
+            st.plotly_chart(visits_forecast)
+            st.plotly_chart(workstation_forecast)
     else:
         pass
 
