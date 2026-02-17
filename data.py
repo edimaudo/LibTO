@@ -31,4 +31,7 @@ physical['AdultLiteracyProgram'] = pd.to_numeric(physical['AdultLiteracyProgram'
 physical['PresentSiteYear'] = pd.to_numeric(physical['PresentSiteYear'], errors='coerce')
 oldest = physical.sort_values('PresentSiteYear').iloc[0]
 
+branch_list = physical['BranchName'].unique()
+branch_list = branch_list.astype('str')
+branch_list.sort()
 
