@@ -1,6 +1,6 @@
 # LibTO
 LibTO is a civic intelligence app designed to transform [Toronto Public Library (TPL)](https://tpl.ca/about-the-library/open-data/) open data into actionable operational insights.
-By leveraging Toronto Open Data and DigitalOcean Gradient AI, libTO allows denizens to understand library branch health and can discover programs & events.
+By leveraging Toronto Open Data, libTO allows denizens to understand library branch health and can discover programs & events.
 
 ## Key Features
 ### Overview
@@ -21,16 +21,15 @@ Libeary Events: Leverages open data to show events happening at the different br
 - Front-end: Streamlit 
 - Data Processing: Pandas 
 - Visualizations: Plotly
-- AI Intelligence: DigitalOcean Gradient AI
+- AI Intelligence: 
 
 ## Getting Started
 1. Environment Configuration
-Create a .env file in the root directory with your DigitalOcean credentials:
+Create a .env file in the root directory with your AI credentials:
 
 Bash
 ```
-GRADIENT_ACCESS_TOKEN=your_token_here
-GRADIENT_WORKSPACE_ID=your_workspace_id_here
+
 ```
 
 2. Installation
