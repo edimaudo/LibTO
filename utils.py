@@ -1,6 +1,5 @@
 
 # Libraries
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -20,22 +19,18 @@ import scipy
 from scipy.stats import linregress
 import sklearn
 from sklearn.linear_model import LinearRegression
+import pmdarima as pm
 from pmdarima import auto_arima
 from google import genai
 from elasticsearch import Elasticsearch
 from dotenv import load_dotenv, dotenv_values 
 
-
-"""
-App Information
-"""
+# App Information
 APP_NAME = 'LibTO'
 ABOUT_HEADER = 'About'
 OVERVIEW_HEADER = 'Overview'
 BRANCH_INTELLIGENCE_HEADER = "Branch Intelligence"
 BRANCH_PROGRAM_EVENT_HEADER = 'Branch Program & Events'
-APP_FILTERS = 'Filters'
-NO_DATA_INFO = 'No data available to display based on the filters'
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 st.set_page_config(
