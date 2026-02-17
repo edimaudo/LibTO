@@ -35,3 +35,30 @@ branch_list = physical['BranchName'].unique()
 branch_list = branch_list.astype('str')
 branch_list.sort()
 
+COMMON_LAYOUT = dict(
+    template='plotly_white',
+    margin=dict(l=10, r=10, t=40, b=10),
+    title_font_size=20,
+    title_x=0.5,
+    height=400
+)
+
+def create_branch_bar_chart(df, x_col, y_col, title, y_label):
+    fig = px.bar(
+        df,
+        x=x_col,
+        y=y_col,
+        title=title,
+        labels={y_col: y_label},
+        hover_data={x_col: True, y_col: ':.0f'}
+    )
+    
+    fig.update_layout(
+        template='plotly_white',
+        margin=dict(l=10, r=10, t=40, b=10),
+        title_font_size=20,
+        title_x=0.5,
+        height=400
+    )
+    
+    return fig
