@@ -7,14 +7,14 @@ blocks:
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
   description: Visualizes annual library workstation usage trends with a line chart
-    showing total sessions by year
+    showing total sessions by year (for physical branches only)
   height: 1000
   id: 138a4039-882a-46ed-9f3b-531c3acc9c98
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   name: workstation_usage_visualization
   parent_id: null
   properties: {}
-  status: 3
+  status: 1
   type: 1
   variables: null
   width: 1600
@@ -23,15 +23,15 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Visualizes annual card registrations trends with line chart showing
-    total registrations by year
+  description: Plots annual card registration trends across physical library branches
+    over time
   height: 1000
   id: 23233bcb-bec5-4c9f-b478-769fef84a1d6
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   name: annual_metrics_visualization
   parent_id: null
   properties: {}
-  status: 3
+  status: 1
   type: 1
   variables: null
   width: 1600
@@ -84,7 +84,7 @@ blocks:
   name: branch_metrics_bubble
   parent_id: null
   properties: {}
-  status: 3
+  status: 1
   type: 1
   variables: null
   width: 1600
@@ -93,12 +93,13 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Aggregates library visit and workstation sessions by branch, merges
-    with location data, and calculates Library Health Index normalized by square footage
+  description: Calculates Library Health Index for physical branches by merging visits
+    & workstation usage data normalized by square footage, visualizes top & bottom
+    10 performers
   height: 1000
   id: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
-  name: python_block
+  name: branch_health_index
   parent_id: null
   properties: {}
   status: 1
@@ -117,7 +118,7 @@ blocks:
   name: annual_circulation_plot
   parent_id: null
   properties: {}
-  status: 3
+  status: 1
   type: 1
   variables: null
   width: 1600
@@ -169,7 +170,7 @@ blocks:
   name: annual_visits_chart
   parent_id: null
   properties: {}
-  status: 3
+  status: 1
   type: 1
   variables: null
   width: 1600
@@ -192,10 +193,10 @@ edges:
   source: 3328c101-3867-44db-b80b-cd7696b291fe
   target: fd7421e0-fe48-4072-9c9e-1e9031b2d09a
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
-  id: 76c97de6-a395-429d-87c5-62b2c4c71d59
+  id: 79219bd7-68d8-49ac-b24a-81efc3e219cd
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
-  source: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
-  target: 432262ad-34a7-46c3-bcae-f15bb8ea26d0
+  source: edec4d03-4567-42bd-8f15-4e7f6dc4bfb6
+  target: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: 8cb228f6-c4b4-41cc-b753-853b8f1345b7
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
