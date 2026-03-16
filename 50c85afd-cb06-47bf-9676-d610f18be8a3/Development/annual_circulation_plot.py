@@ -1,25 +1,16 @@
-# 2. Circulation
 import plotly.express as px
-df_circulation = dataframes['df_circulation']
 
-# Filter out non-physical/virtual branch names
-_branches_to_exclude = [
-    'Answerline',
-    'Bookmobile One',
-    'Bookmobile Two',
-    'Departmental Staff',
-    'Home Library Service',
-    'Interloan',
-    'Literacy Deposits',
-    'Merril Collection',
-    'Osborne Collection',
-    'Automated Phone System',
-    'Sunnybrook Hospital',
-    'Virtual Library',
-]
-df_circulation = df_circulation[~df_circulation['BranchName'].isin(_branches_to_exclude)]
+# Load circulation data from the dataframes dictionary (loaded in data_loading_preparation)
+# df_circulation has columns: _id, Year, BranchCode, Circulation — NO BranchName column
+_df_circ_raw = dataframes['df_circulation']
 
-annual_circulation = df_circulation.groupby('Year')['Circulation'].sum().reset_index()
+# Filter out non-physical/virtual branches by joining with df_general_info on BranchCode
+# (BRANCHES_TO_EXCLUDE is available from upstream annual_metrics_visualization block)
+_branch_codes_to_keep = df_general_info[~df_general_info['BranchName'].isin(BRANCHES_TO_EXCLUDE)][['BranchCode']]
+_df_circ_filtered = _df_circ_raw[_df_circ_raw['BranchCode'].isin(_branch_codes_to_keep['BranchCode'])]
+
+annual_circulation = _df_circ_filtered.groupby('Year')['Circulation'].sum().reset_index()
+
 fig_circulation = px.line(
     annual_circulation,
     x='Year',

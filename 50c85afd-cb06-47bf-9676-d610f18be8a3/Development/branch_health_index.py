@@ -5,17 +5,16 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.express as px
 
-df_visits = dataframes['df_visits']
-df_total_visits = df_visits.groupby('BranchCode')['Visits'].sum().reset_index()
+# Use _ prefix for local variables to avoid downstream conflicts
+_df_visits = dataframes['df_visits']
+df_total_visits = _df_visits.groupby('BranchCode')['Visits'].sum().reset_index()
 df_total_visits.rename(columns={'Visits': 'TotalVisits'}, inplace=True)
 
-df_workstation_usage = dataframes['df_workstation_usage']
-df_total_workstation_usage = df_workstation_usage.groupby('BranchCode')['Sessions'].sum().reset_index()
+_df_workstation_usage = dataframes['df_workstation_usage']
+df_total_workstation_usage = _df_workstation_usage.groupby('BranchCode')['Sessions'].sum().reset_index()
 df_total_workstation_usage.rename(columns={'Sessions': 'TotalWorkstationUsage'}, inplace=True)
 
 df_map_data = dataframes['df_map_data']
-df_total_visits = df_total_visits 
-df_total_workstation_usage = df_total_workstation_usage 
 
 # Merge df_map_data with df_total_visits
 df_health_index_data = pd.merge(
@@ -33,9 +32,7 @@ df_health_index_data = pd.merge(
     how='left'
 )
 
-# Fill NaN values in TotalVisits and TotalWorkstationUsage with 0
-# This assumes that if a branch does not appear in the visits/workstation usage data,
-# it means it had 0 visits/sessions for those metrics.
+# Fill NaN values with 0
 df_health_index_data['TotalVisits'].fillna(0, inplace=True)
 df_health_index_data['TotalWorkstationUsage'].fillna(0, inplace=True)
 
@@ -69,13 +66,10 @@ print("\ndf_health_index_data.info():")
 df_health_index_data.info()
 
 # Calculate the 'Library Health Index'
-# Ensure SquareFootage is not zero to avoid division by zero errors.
-# If SquareFootage is 0 or NaN, the index will be NaN.
 df_health_index_data['LibraryHealthIndex'] = (
     df_health_index_data['TotalVisits'] + df_health_index_data['TotalWorkstationUsage']
 ) / df_health_index_data['SquareFootage']
 
-# Display head and info of the DataFrame with the new index
 print("--- DataFrame with Library Health Index ---")
 print("\ndf_health_index_data.head():")
 print(df_health_index_data.head())
@@ -91,22 +85,18 @@ _lhi = (
     .reset_index(drop=True)
 )
 
-# Top 10 descending (highest performers first)
 _top10 = _lhi.head(10).copy()
-
-# Bottom 10 ascending (lowest performers first, worst at the bottom of its chart)
 _bot10 = _lhi.tail(10).sort_values('LibraryHealthIndex', ascending=True).copy()
 
-_COLOR_TOP = '#2196F3'   # blue
-_COLOR_BOT = '#FF5722'   # deep orange
+_COLOR_TOP = '#2196F3'
+_COLOR_BOT = '#FF5722'
 
 fig_health_ranking = make_subplots(
     rows=1, cols=2,
-    subplot_titles=('🏆 Top 10 Branches', '⚠️ Bottom 10 Branches'),
+    subplot_titles=('Top 10 Branches', 'Bottom 10 Branches'),
     horizontal_spacing=0.18,
 )
 
-# Top 10 — descending (highest at top of horizontal bar)
 fig_health_ranking.add_trace(
     go.Bar(
         x=_top10['LibraryHealthIndex'],
@@ -121,7 +111,6 @@ fig_health_ranking.add_trace(
     row=1, col=1,
 )
 
-# Bottom 10 — ascending (lowest at bottom of horizontal bar)
 fig_health_ranking.add_trace(
     go.Bar(
         x=_bot10['LibraryHealthIndex'],
@@ -151,7 +140,6 @@ fig_health_ranking.update_layout(
     font=dict(size=12),
 )
 
-# Axis styling — top panel
 fig_health_ranking.update_xaxes(
     title_text='Health Index',
     showgrid=True,
@@ -159,12 +147,11 @@ fig_health_ranking.update_xaxes(
     row=1, col=1,
 )
 fig_health_ranking.update_yaxes(
-    autorange='reversed',   # highest value at the top
+    autorange='reversed',
     tickfont=dict(size=11),
     row=1, col=1,
 )
 
-# Axis styling — bottom panel
 fig_health_ranking.update_xaxes(
     title_text='Health Index',
     showgrid=True,

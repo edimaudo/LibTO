@@ -1,64 +1,64 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-# --- Load dataframes from the dataframes dict ---
-df_card_registrations = dataframes['df_card_registrations']
-df_visits = dataframes['df_visits']
-df_circulation = dataframes['df_circulation']
-df_workstation_usage = dataframes['df_workstation_usage']
+# --- Load dataframes directly from the dataframes dict (avoid upstream variable conflicts) ---
+_df_card_registrations = dataframes['df_card_registrations']
+_df_visits             = dataframes['df_visits']
+_df_circulation        = dataframes['df_circulation']
+_df_workstation_usage  = dataframes['df_workstation_usage']
+
+# --- Build branch_name_map locally from df_general_info ---
+_branch_name_map = df_general_info.set_index('BranchCode')['BranchName'].to_dict()
 
 # --- BranchCodes to exclude (non-physical / special service branches) ---
-BRANCHES_TO_EXCLUDE = {
+_BRANCHES_TO_EXCLUDE = {
     "Answerline", "Bookmobile One", "Bookmobile Two", "Departmental Staff",
     "Home Library Service", "Interloan", "Literacy Deposits", "Merril Collection",
     "Osborne Collection", "Automated Phone System", "Sunnybrook Hospital", "Virtual Library"
 }
 
-# Reverse the branch_name_map to get BranchCode -> BranchName and vice versa
-name_to_code = {v: k for k, v in branch_name_map.items()}
-codes_to_exclude = {name_to_code[n] for n in BRANCHES_TO_EXCLUDE if n in name_to_code}
+_name_to_code    = {v: k for k, v in _branch_name_map.items()}
+_codes_to_exclude = {_name_to_code[n] for n in _BRANCHES_TO_EXCLUDE if n in _name_to_code}
 
-print(f"Excluding {len(codes_to_exclude)} branch codes: {sorted(codes_to_exclude)}")
+print(f"Excluding {len(_codes_to_exclude)} branch codes: {sorted(_codes_to_exclude)}")
 
 # --- Helper: filter out excluded branches and aggregate by BranchCode ---
-def aggregate_metric(df, value_col):
-    _df = df[~df['BranchCode'].isin(codes_to_exclude)].copy()
+def _aggregate_metric(df, value_col):
+    _df = df[~df['BranchCode'].isin(_codes_to_exclude)].copy()
     return _df.groupby('BranchCode')[value_col].sum().reset_index()
 
-agg_registrations  = aggregate_metric(df_card_registrations, 'Registrations')
-agg_visits         = aggregate_metric(df_visits,              'Visits')
-agg_circulation    = aggregate_metric(df_circulation,         'Circulation')
-agg_workstation    = aggregate_metric(df_workstation_usage,   'Sessions')
+_agg_registrations = _aggregate_metric(_df_card_registrations, 'Registrations')
+_agg_visits        = _aggregate_metric(_df_visits,              'Visits')
+_agg_circulation   = _aggregate_metric(_df_circulation,         'Circulation')
+_agg_workstation   = _aggregate_metric(_df_workstation_usage,   'Sessions')
 
 # --- Merge all metrics on BranchCode ---
 df_corr = (
-    agg_registrations
-    .merge(agg_visits,      on='BranchCode', how='inner')
-    .merge(agg_circulation, on='BranchCode', how='inner')
-    .merge(agg_workstation, on='BranchCode', how='inner')
+    _agg_registrations
+    .merge(_agg_visits,       on='BranchCode', how='inner')
+    .merge(_agg_circulation,  on='BranchCode', how='inner')
+    .merge(_agg_workstation,  on='BranchCode', how='inner')
 )
 
 # Add readable branch names
-df_corr['BranchName'] = df_corr['BranchCode'].map(branch_name_map)
+df_corr['BranchName'] = df_corr['BranchCode'].map(_branch_name_map)
 print(f"Branches included in correlation matrix: {len(df_corr)}")
 
 # --- Compute Pearson correlation matrix ---
-metric_cols = ['Registrations', 'Visits', 'Circulation', 'Sessions']
-corr_matrix = df_corr[metric_cols].corr()
+metric_cols  = ['Registrations', 'Visits', 'Circulation', 'Sessions']
+corr_matrix  = df_corr[metric_cols].corr()
 
 # Rename columns/index for display clarity
 display_labels = {
-    'Registrations':  'Card Registrations',
-    'Visits':         'Visits',
-    'Circulation':    'Circulation',
-    'Sessions':       'Workstation Usage',
+    'Registrations': 'Card Registrations',
+    'Visits':        'Visits',
+    'Circulation':   'Circulation',
+    'Sessions':      'Workstation Usage',
 }
 corr_display = corr_matrix.rename(index=display_labels, columns=display_labels)
 
-labels = corr_display.columns.tolist()
-z_vals = corr_display.values.tolist()
-
-# Build annotation text (2 decimal places)
+labels    = corr_display.columns.tolist()
+z_vals    = corr_display.values.tolist()
 text_vals = [[f"{v:.2f}" for v in row] for row in z_vals]
 
 # --- Plotly heatmap ---

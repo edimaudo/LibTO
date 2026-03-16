@@ -14,7 +14,7 @@ blocks:
   name: workstation_usage_visualization
   parent_id: null
   properties: {}
-  status: 1
+  status: 3
   type: 1
   variables: null
   width: 1600
@@ -31,7 +31,7 @@ blocks:
   name: annual_metrics_visualization
   parent_id: null
   properties: {}
-  status: 1
+  status: 3
   type: 1
   variables: null
   width: 1600
@@ -84,25 +84,24 @@ blocks:
   name: branch_metrics_bubble
   parent_id: null
   properties: {}
-  status: 1
+  status: 3
   type: 1
   variables: null
   width: 1600
   x: 2000
-  y: 5800
+  y: 4400
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Calculates Library Health Index for physical branches by merging visits
-    & workstation usage data normalized by square footage, visualizes top & bottom
-    10 performers
+  description: Computes Library Health Index per branch (visits + workstation sessions
+    / square footage), displays top & bottom 10 ranked branches side-by-side
   height: 1000
   id: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   name: branch_health_index
   parent_id: null
   properties: {}
-  status: 1
+  status: 3
   type: 1
   variables: null
   width: 1600
@@ -111,14 +110,15 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Aggregates library circulation by year and visualizes as line chart
+  description: Aggregates annual circulation across physical branches and renders
+    interactive line chart
   height: 1000
   id: ab737369-2276-4c18-aef7-8783a18e88cc
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   name: annual_circulation_plot
   parent_id: null
   properties: {}
-  status: 1
+  status: 3
   type: 1
   variables: null
   width: 1600
@@ -127,20 +127,20 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Computes Pearson correlation matrix for library metrics and visualizes
-    as interactive heatmap
+  description: Builds Pearson correlation heatmap showing relationships between card
+    registrations, visits, circulation, and workstation usage across physical branches
   height: 1000
   id: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   name: branch_metrics_correlation
   parent_id: null
   properties: {}
-  status: 1
+  status: 3
   type: 1
   variables: null
   width: 1600
-  x: 2000
-  y: 3000
+  x: 4000
+  y: 6300
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
@@ -170,7 +170,7 @@ blocks:
   name: annual_visits_chart
   parent_id: null
   properties: {}
-  status: 1
+  status: 3
   type: 1
   variables: null
   width: 1600
@@ -183,10 +183,25 @@ edges:
   source: 3328c101-3867-44db-b80b-cd7696b291fe
   target: 23233bcb-bec5-4c9f-b478-769fef84a1d6
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  id: 2d2130a7-972f-42fe-9ddf-73591c71e50a
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  source: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
+  target: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
+- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: 38fd708c-b617-45c9-ae3c-6045ed949c89
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   source: 3328c101-3867-44db-b80b-cd7696b291fe
   target: 138a4039-882a-46ed-9f3b-531c3acc9c98
+- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  id: 43cf3ee1-ff9d-4c07-bc41-952777e92e6e
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  source: 23233bcb-bec5-4c9f-b478-769fef84a1d6
+  target: ab737369-2276-4c18-aef7-8783a18e88cc
+- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  id: 5600b536-d21c-45e1-9adb-f7b6107643e0
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  source: edec4d03-4567-42bd-8f15-4e7f6dc4bfb6
+  target: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: 69af0913-3855-4cb8-a0df-1e0c55718e1c
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
@@ -197,6 +212,11 @@ edges:
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   source: edec4d03-4567-42bd-8f15-4e7f6dc4bfb6
   target: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
+- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  id: 8b5c6863-8335-4dde-9600-63fdefacd470
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  source: 3c1cf3ec-34f7-4e51-b18c-34ea547d59be
+  target: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: 8cb228f6-c4b4-41cc-b753-853b8f1345b7
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
@@ -222,6 +242,11 @@ edges:
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   source: 3328c101-3867-44db-b80b-cd7696b291fe
   target: 3c1cf3ec-34f7-4e51-b18c-34ea547d59be
+- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  id: c135e8d4-d1a7-4099-b466-f21ad6d78c63
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  source: 3c1cf3ec-34f7-4e51-b18c-34ea547d59be
+  target: 432262ad-34a7-46c3-bcae-f15bb8ea26d0
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: fb924a7f-d41e-416e-9aa0-a0573c5975d3
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
