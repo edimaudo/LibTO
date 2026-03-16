@@ -83,6 +83,42 @@ layers:
   - auto_size: false
     canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
     compute_settings: null
+    description: "Creates 2\xD72 bubble chart comparing branch metrics (registrations,\
+      \ visits, circulation, workstation usage) against square footage with service\
+      \ tier coloring and trend lines"
+    height: 1000
+    id: 432262ad-34a7-46c3-bcae-f15bb8ea26d0
+    layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+    name: branch_metrics_bubble
+    parent_id: null
+    properties: {}
+    status: 3
+    type: 1
+    variables: null
+    width: 1600
+    x: 2000
+    y: 5800
+  - auto_size: false
+    canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+    compute_settings: null
+    description: Aggregates library visit and workstation sessions by branch, merges
+      with location data, and calculates Library Health Index normalized by square
+      footage
+    height: 1000
+    id: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
+    layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+    name: python_block
+    parent_id: null
+    properties: {}
+    status: 1
+    type: 1
+    variables: null
+    width: 1600
+    x: 2000
+    y: 6300
+  - auto_size: false
+    canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+    compute_settings: null
     description: Aggregates library circulation by year and visualizes as line chart
     height: 1000
     id: ab737369-2276-4c18-aef7-8783a18e88cc
@@ -99,19 +135,20 @@ layers:
   - auto_size: false
     canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
     compute_settings: null
-    description: ''
+    description: Computes Pearson correlation matrix for library metrics and visualizes
+      as interactive heatmap
     height: 1000
     id: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
     layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
-    name: python_block
+    name: branch_metrics_correlation
     parent_id: null
     properties: {}
     status: 1
     type: 1
     variables: null
     width: 1600
-    x: 0
-    y: 3500
+    x: 2000
+    y: 3000
   - auto_size: false
     canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
     compute_settings: null
@@ -165,15 +202,30 @@ layers:
     source: 3328c101-3867-44db-b80b-cd7696b291fe
     target: fd7421e0-fe48-4072-9c9e-1e9031b2d09a
   - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
-    id: 7d3f3178-acd5-4c1d-a57f-d62423775464
+    id: 76c97de6-a395-429d-87c5-62b2c4c71d59
     layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
-    source: 3c1cf3ec-34f7-4e51-b18c-34ea547d59be
+    source: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
+    target: 432262ad-34a7-46c3-bcae-f15bb8ea26d0
+  - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+    id: 8cb228f6-c4b4-41cc-b753-853b8f1345b7
+    layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+    source: 3328c101-3867-44db-b80b-cd7696b291fe
     target: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
   - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
     id: a45d50a8-590f-4493-8890-14cbd78dfa13
     layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
     source: 3328c101-3867-44db-b80b-cd7696b291fe
     target: edec4d03-4567-42bd-8f15-4e7f6dc4bfb6
+  - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+    id: afcaf7d7-d68d-49cc-9fa5-db58f7dd5960
+    layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+    source: 3328c101-3867-44db-b80b-cd7696b291fe
+    target: 432262ad-34a7-46c3-bcae-f15bb8ea26d0
+  - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+    id: b95623f8-7507-44e5-a5d3-9af1fae15d05
+    layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+    source: 3328c101-3867-44db-b80b-cd7696b291fe
+    target: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
   - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
     id: b96c63fa-b13d-47e1-bf7a-3bb54a24276a
     layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
