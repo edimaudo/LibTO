@@ -6,23 +6,6 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Selects optimal ARIMA order for annual library visits using custom
-    NumPy/SciPy implementation (3, 2, 0)
-  height: 1000
-  id: 12f321e7-3c75-456c-a65b-1b0765ba87e6
-  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
-  name: auto_arima_setup
-  parent_id: null
-  properties: {}
-  status: 1
-  type: 1
-  variables: null
-  width: 1600
-  x: 4000
-  y: 6800
-- auto_size: false
-  canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
-  compute_settings: null
   description: Visualizes annual library workstation usage trends with a line chart
     showing total sessions by year (for physical branches only)
   height: 1000
@@ -75,8 +58,8 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Creates 4x2 dashboard comparing top and bottom 10 branches across card
-    registrations, circulation, visits, and workstation usage
+  description: Creates 8-panel dashboard showing top and bottom 10 performing branches
+    across registrations, circulation, visits, and workstation usage metrics
   height: 1000
   id: 3c1cf3ec-34f7-4e51-b18c-34ea547d59be
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
@@ -109,9 +92,9 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: "Creates 2\xD72 bubble chart comparing branch metrics (registrations,\
+  description: "Creates 2\xD72 bubble chart comparing branch metrics (card registrations,\
     \ visits, circulation, workstation usage) against square footage with service\
-    \ tier coloring and trend lines"
+    \ tier coloring"
   height: 1000
   id: 432262ad-34a7-46c3-bcae-f15bb8ea26d0
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
@@ -127,8 +110,8 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Computes Library Health Index per branch (visits + workstation sessions
-    / square footage), displays top & bottom 10 ranked branches side-by-side
+  description: Calculates Library Health Index per branch (visits+workstation usage/sq
+    footage) and visualizes top 10 vs bottom 10 performers
   height: 1000
   id: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
@@ -141,6 +124,22 @@ blocks:
   width: 1600
   x: 2000
   y: 6300
+- auto_size: false
+  canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  compute_settings: null
+  description: Displays Library Impact Index chart ranking top and bottom 10 branches
+  height: 1000
+  id: ab69604c-e40f-4013-9453-4a2b14e24e76
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  name: display_health_ranking
+  parent_id: null
+  properties: {}
+  status: 3
+  type: 1
+  variables: null
+  width: 1600
+  x: 4000
+  y: 5300
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
@@ -161,8 +160,8 @@ blocks:
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
-  description: Builds Pearson correlation heatmap showing relationships between card
-    registrations, visits, circulation, and workstation usage across physical branches
+  description: Computes Pearson correlation matrix across 4 library metrics and visualizes
+    relationships as interactive heatmap
   height: 1000
   id: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
@@ -175,6 +174,23 @@ blocks:
   width: 1600
   x: 4000
   y: 6300
+- auto_size: false
+  canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  compute_settings: null
+  description: Displays branch rankings across four key metrics with top and bottom
+    10 performers
+  height: 1000
+  id: ca454eb5-1516-41cb-89f0-b91b48f002e9
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  name: show_branch_rankings
+  parent_id: null
+  properties: {}
+  status: 3
+  type: 1
+  variables: null
+  width: 1600
+  x: 2000
+  y: 3900
 - auto_size: false
   canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   compute_settings: null
@@ -217,11 +233,6 @@ edges:
   source: 3328c101-3867-44db-b80b-cd7696b291fe
   target: 23233bcb-bec5-4c9f-b478-769fef84a1d6
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
-  id: 2d2130a7-972f-42fe-9ddf-73591c71e50a
-  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
-  source: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
-  target: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
-- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: 38fd708c-b617-45c9-ae3c-6045ed949c89
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   source: 3328c101-3867-44db-b80b-cd7696b291fe
@@ -251,6 +262,16 @@ edges:
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   source: edec4d03-4567-42bd-8f15-4e7f6dc4bfb6
   target: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
+- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  id: 7b0187ba-79bf-437e-b3e9-a1a5f15f1c23
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  source: 9cae4b33-5fd5-4da1-91a8-0986d74bb012
+  target: ab69604c-e40f-4013-9453-4a2b14e24e76
+- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
+  id: 7d8c2eb6-e872-46e4-b212-31b6d34e48cc
+  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
+  source: 3c1cf3ec-34f7-4e51-b18c-34ea547d59be
+  target: ca454eb5-1516-41cb-89f0-b91b48f002e9
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: 8b5c6863-8335-4dde-9600-63fdefacd470
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
@@ -286,11 +307,6 @@ edges:
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
   source: 3c1cf3ec-34f7-4e51-b18c-34ea547d59be
   target: 432262ad-34a7-46c3-bcae-f15bb8ea26d0
-- canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
-  id: d87eec41-2f1b-4dd6-b8ba-9e525a2fef4c
-  layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748
-  source: c5228183-d4d3-4f1f-8c27-4bef7a85ef77
-  target: 12f321e7-3c75-456c-a65b-1b0765ba87e6
 - canvas_id: 50c85afd-cb06-47bf-9676-d610f18be8a3
   id: fb924a7f-d41e-416e-9aa0-a0573c5975d3
   layer_id: d330f714-1b17-4e79-9fc7-4cbca0116748

@@ -75,7 +75,7 @@ fig_correlation = go.Figure(
         zmax=1,
         reversescale=False,
         colorbar=dict(
-            title="Pearson r",
+            title="Pearson Correlation",
             thickness=18,
             tickvals=[-1, -0.5, 0, 0.5, 1],
         ),
@@ -84,8 +84,7 @@ fig_correlation = go.Figure(
 
 fig_correlation.update_layout(
     title=dict(
-        text="<b>Toronto Public Library — Branch Metrics Correlation Matrix</b><br>"
-             "<sup>Pearson correlation across all years (physical branches only)</sup>",
+        text="<b>Toronto Public Library — Branch Metrics Correlation</b><br>",
         x=0.5,
         xanchor="center",
         font=dict(size=18),

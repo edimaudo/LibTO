@@ -127,7 +127,7 @@ fig_health_ranking.add_trace(
 
 fig_health_ranking.update_layout(
     title={
-        'text': 'Library Health Index — Top 10 & Bottom 10 Branches',
+        'text': 'Library Impact Index — Top 10 & Bottom 10 Branches',
         'x': 0.5,
         'xanchor': 'center',
         'font': {'size': 18},
@@ -141,7 +141,7 @@ fig_health_ranking.update_layout(
 )
 
 fig_health_ranking.update_xaxes(
-    title_text='Health Index',
+    title_text='Impact Index',
     showgrid=True,
     gridcolor='#eeeeee',
     row=1, col=1,
@@ -153,7 +153,7 @@ fig_health_ranking.update_yaxes(
 )
 
 fig_health_ranking.update_xaxes(
-    title_text='Health Index',
+    title_text='Impact Index',
     showgrid=True,
     gridcolor='#eeeeee',
     row=1, col=2,

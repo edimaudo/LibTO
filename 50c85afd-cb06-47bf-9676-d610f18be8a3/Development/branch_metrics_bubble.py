@@ -122,25 +122,25 @@ for _idx, (_col, _label, _colour) in enumerate(_METRICS):
         row=_row, col=_col_pos,
     )
 
-    # Trend line (linear regression)
-    _x_vals = _df_bubble['SquareFootage'].values
-    _y_vals = _sizes.values
-    _valid = ~(np.isnan(_x_vals) | np.isnan(_y_vals))
-    _m, _b = np.polyfit(_x_vals[_valid], _y_vals[_valid], 1)
-    _x_line = np.linspace(_x_vals[_valid].min(), _x_vals[_valid].max(), 200)
-    _y_line = _m * _x_line + _b
+    # # Trend line (linear regression)
+    # _x_vals = _df_bubble['SquareFootage'].values
+    # _y_vals = _sizes.values
+    # _valid = ~(np.isnan(_x_vals) | np.isnan(_y_vals))
+    # _m, _b = np.polyfit(_x_vals[_valid], _y_vals[_valid], 1)
+    # _x_line = np.linspace(_x_vals[_valid].min(), _x_vals[_valid].max(), 200)
+    # _y_line = _m * _x_line + _b
 
-    fig_bubble.add_trace(
-        go.Scatter(
-            x=_x_line,
-            y=_y_line,
-            mode='lines',
-            line=dict(color='rgba(80,80,80,0.45)', dash='dash', width=1.5),
-            hoverinfo='skip',
-            showlegend=False,
-        ),
-        row=_row, col=_col_pos,
-    )
+    # fig_bubble.add_trace(
+    #     go.Scatter(
+    #         x=_x_line,
+    #         y=_y_line,
+    #         mode='lines',
+    #         line=dict(color='rgba(80,80,80,0.45)', dash='dash', width=1.5),
+    #         hoverinfo='skip',
+    #         showlegend=False,
+    #     ),
+    #     row=_row, col=_col_pos,
+    # )
 
     # Axis labels
     fig_bubble.update_xaxes(
@@ -196,8 +196,7 @@ fig_bubble.add_annotation(
 
 fig_bubble.update_layout(
     title=dict(
-        text="<b>Toronto Public Library — Branch Metrics vs. Square Footage</b><br>"
-             "<sup>Each bubble represents a physical branch · Colour = Service Tier · Dashed line = linear trend</sup>",
+        text="<b>Toronto Public Library — Branch Metrics vs. Square Footage</b><br>",
         x=0.5,
         xanchor='center',
         font=dict(size=17),
