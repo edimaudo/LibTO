@@ -13,8 +13,8 @@ Library Operations: Ask questions about library operations + understand how libr
 
 ### Branch Programs & Events
 Libeary Events: Leverages open data to show events happening at the different branches
-- Library event list
-- Event Concierge Agent: Discover branch programs and events filtered by AI to match specific user needs
+- ~~Library event list~~
+- ~~Event Concierge Agent: Discover branch programs and events filtered by AI to match specific user needs~~
 
 ## Tech Stack
 - Front-end: Streamlit 
