@@ -10,7 +10,6 @@ A high-level overview of the Toronto Public Library System
 Library Operations: Ask questions about library operations + understand how library branches have changed overtime
 - ~~Library Branch Agent: Can ask questions about library information or use it to search for certain amenities the library has~~
 - Library Branch Forecaster: A tool to forecast visits, card registrations, workstation usage, circulations
-- ~~Library Pulse Agent: A real-time simulation engine to forecast the impact of operational changes~~
 
 ### Branch Programs & Events
 Libeary Events: Leverages open data to show events happening at the different branches
