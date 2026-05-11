@@ -17,7 +17,7 @@ df_card_registration = load_data(path + "tpl-card-registrations-annual-by-branch
 df_circulation = load_data(path + "tpl-circulation-annual-by-branch.csv")
 df_workstation_usage = load_data(path + "tpl-workstation-usage-annual-by-branch.csv")
 df_space_rental = load_data(path + "tpl-branch-space-rentals-2024.csv")
-df_neighborhood = load_data(path + "Neighbourhoods.csv")
+df_neighborhoods = load_data(path + "Neighbourhoods.csv")
 
 # Physical branches        
 physical = branch_info[branch_info['PhysicalBranch'] != 0]
@@ -106,8 +106,18 @@ def prepare_analysis_df(physical_df, metrics):
 # Run the pipeline
 df_analysis = prepare_analysis_df(physical, METRIC_MAP)
 
+# Merge df_general_info and df_neighbourhoods
+df_merged_geo = pd.merge(
+    physical,
+    df_neighborhoods,
+    left_on='NBHDNo',
+    right_on='AREA_ID',
+    how='left'
+)
+
+df_map_data = df_merged_geo
+
 # --- Generate Figures ---
-# 1. 4-Panel Bubble Chart
 fig_bubble = make_subplots(
     rows=2, cols=2, subplot_titles=[m['label'] for m in METRIC_MAP],
     horizontal_spacing=0.1, vertical_spacing=0.15
@@ -123,7 +133,7 @@ for i, m in enumerate(METRIC_MAP):
             x=df_analysis['SquareFootage'], y=vals, mode='markers',
             marker=dict(size=b_sizes, color=colors, opacity=0.7, line=dict(width=0.5, color='white')),
             text=df_analysis['BranchName'],
-            hovertemplate="<b>%{text}</b><br>Sqft: %{x:,.0f}<br>Value: %{y:,.0f}<extra></extra>",
+            hovertemplate="<b>%{text}</b><br>Sq. ft: %{x:,.0f}<br>Value: %{y:,.0f}<extra></extra>",
             showlegend=False
         ), row=row, col=col)
 fig_bubble.update_layout(height=800, template="plotly_white", title_text="Performance vs. Size by Service Tier", title_x=0.5)
@@ -148,7 +158,7 @@ for i, m in enumerate(METRIC_MAP):
         top, bot = sorted_df.head(10).iloc[::-1], sorted_df.tail(10)
         fig_rankings.add_trace(go.Bar(x=top[m['id']], y=top['BranchName'], orientation='h', marker_color='#1a6fc4', showlegend=False), row=i+1, col=1)
         fig_rankings.add_trace(go.Bar(x=bot[m['id']], y=bot['BranchName'], orientation='h', marker_color='#e05b3a', showlegend=False), row=i+1, col=2)
-fig_rankings.update_layout(height=1200, title_text="Branch Metrics Ranking", template="plotly_white", margin=dict(l=200))
+fig_rankings.update_layout(height=1200, title_text="Branch Metrics Ranking", template="plotly_white", margin=dict(l=200), title_x=0.5)
 
 def create_branch_bar_chart(df, x_col, y_col, title, y_label):
     fig = px.bar(
