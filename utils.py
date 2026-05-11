@@ -28,7 +28,7 @@ from dotenv import load_dotenv, dotenv_values
 # App Information
 APP_NAME = 'LibTO'
 ABOUT_HEADER = 'About'
-OVERVIEW_HEADER = 'Overview'
+OVERVIEW_HEADER = 'Library Insights'
 BRANCH_INTELLIGENCE_HEADER = "Branch Intelligence"
 BRANCH_PROGRAM_EVENT_HEADER = 'Branch Program & Events'
 

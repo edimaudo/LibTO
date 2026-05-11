@@ -4,6 +4,6 @@ from utils import *
 pg = st.navigation([
     st.Page("Overview.py"),
     st.Page("Branch_Intelligence.py"),
-    #st.Page("Branch_program_event.py"),
+    st.Page("Branch_program_event.py"),
 ])
 pg.run()
