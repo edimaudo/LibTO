@@ -4,23 +4,25 @@ from utils import *
 @st.cache_data
 def load_data(DATA_URL):
     data = pd.read_csv(DATA_URL)
-    #for col in ['GIFT_DATE', 'CRM_INTERACTION_DATE', 'SENT_DATE']:
-    #    if col in data.columns:
-    #        data[col] = pd.to_datetime(data[col])
+    for col in ['GIFT_DATE', 'CRM_INTERACTION_DATE', 'SENT_DATE']:
+        if col in data.columns:
+            data[col] = pd.to_datetime(data[col])
     return data
 
 # Datasets
 path = "data/"
 branch_info = load_data(path + "tpl-branch-general-information-2023.csv")
-visits = load_data(path + "tpl-visits-annual-by-branch.csv")
-registration = load_data(path + "tpl-card-registrations-annual-by-branch.csv")
-circulation = load_data(path + "tpl-circulation-annual-by-branch.csv")
-workstation = load_data(path + "tpl-workstation-usage-annual-by-branch.csv")
-space_rental = load_data(path + "tpl-branch-space-rentals-2024.csv")
-neighborhood = load_data(path + "Neighbourhoods.csv")
+df_visits = load_data(path + "tpl-visits-annual-by-branch.csv")
+df_card_registration = load_data(path + "tpl-card-registrations-annual-by-branch.csv")
+df_circulation = load_data(path + "tpl-circulation-annual-by-branch.csv")
+df_workstation_usage = load_data(path + "tpl-workstation-usage-annual-by-branch.csv")
+df_space_rental = load_data(path + "tpl-branch-space-rentals-2024.csv")
+df_neighborhood = load_data(path + "Neighbourhoods.csv")
 
 # Physical branches        
 physical = branch_info[branch_info['PhysicalBranch'] != 0]
+# Clean columns for physical base to avoid hidden spaces
+physical.columns = physical.columns.str.strip()
 physical['SquareFootage'] = pd.to_numeric(physical['SquareFootage'].astype(str).str.replace(',', ''), errors='coerce')      
 physical['Workstations'] = pd.to_numeric(physical['Workstations'], errors='coerce')
 physical['KidsStop'] = pd.to_numeric(physical['KidsStop'], errors='coerce')
@@ -43,6 +45,110 @@ COMMON_LAYOUT = dict(
     title_x=0.5,
     height=400
 )
+
+## Metric data clean up & Advanced Visuals
+# --- Configuration ---
+BRANCHES_TO_EXCLUDE = {
+    "Answerline", "Bookmobile One", "Bookmobile Two", "Departmental Staff",
+    "Home Library Service", "Interloan", "Literacy Deposits", "Merril Collection",
+    "Osborne Collection", "Automated Phone System", "Sunnybrook Hospital", "Virtual Library"
+}
+
+TIER_CONFIG = {
+    'NL': {'label': 'Neighborhood Library (NL)', 'color': '#00CC96'},
+    'DL': {'label': 'District Library (DL)', 'color': '#636EFA'},
+    'RR': {'label': 'Research & Reference Library (RR)', 'color': '#EF553B'},
+}
+
+# Source references for the pipeline
+METRIC_MAP = [
+    {'id': 'Registrations', 'label': 'Card Registrations', 'df': df_card_registration},
+    {'id': 'Visits',         'label': 'Visits',             'df': df_visits},
+    {'id': 'Circulation',    'label': 'Circulation',        'df': df_circulation},
+    {'id': 'Sessions',       'label': 'Workstation Usage',  'df': df_workstation_usage},
+]
+
+# --- Processing Pipeline ---
+def prepare_analysis_df(physical_df, metrics):
+    # Filter physical branches by name exclusion and presence of Square Footage
+    df_base = physical_df[
+        ~physical_df['BranchName'].isin(BRANCHES_TO_EXCLUDE) & 
+        physical_df['SquareFootage'].notna()
+    ].copy()
+    
+    # Normalize ServiceTier naming
+    if 'ServiceTier' in df_base.columns:
+        df_base['ServiceTier'] = df_base['ServiceTier'].replace({'RL': 'RR'})
+    
+    # Get set of codes to exclude
+    excluded_codes = set(physical_df[physical_df['BranchName'].isin(BRANCHES_TO_EXCLUDE)]['BranchCode'])
+    
+    for m in metrics:
+        m_df = m['df'].copy()
+        # FIX: Strip whitespace from columns to prevent KeyError
+        m_df.columns = m_df.columns.str.strip()
+        
+        # Detect Branch identifier
+        code_col = next((c for c in ['BranchCode', 'Branch Code', 'Branch'] if c in m_df.columns), None)
+        
+        if code_col:
+            m_df = m_df.rename(columns={code_col: 'BranchCode'})
+            agg = (
+                m_df[~m_df['BranchCode'].isin(excluded_codes)]
+                .groupby('BranchCode')[m['id']]
+                .sum()
+                .reset_index()
+            )
+            df_base = df_base.merge(agg, on='BranchCode', how='inner')
+            
+    return df_base
+
+# Run the pipeline
+df_analysis = prepare_analysis_df(physical, METRIC_MAP)
+
+# --- Generate Figures ---
+# 1. 4-Panel Bubble Chart
+fig_bubble = make_subplots(
+    rows=2, cols=2, subplot_titles=[m['label'] for m in METRIC_MAP],
+    horizontal_spacing=0.1, vertical_spacing=0.15
+)
+for i, m in enumerate(METRIC_MAP):
+    if m['id'] in df_analysis.columns:
+        row, col = (i // 2 + 1), (i % 2 + 1)
+        vals = df_analysis[m['id']]
+        b_sizes = ((vals - vals.min()) / (vals.max() - vals.min()) * 30 + 8)
+        colors = df_analysis['ServiceTier'].map(lambda x: TIER_CONFIG.get(x, {}).get('color', '#AAAAAA'))
+        
+        fig_bubble.add_trace(go.Scatter(
+            x=df_analysis['SquareFootage'], y=vals, mode='markers',
+            marker=dict(size=b_sizes, color=colors, opacity=0.7, line=dict(width=0.5, color='white')),
+            text=df_analysis['BranchName'],
+            hovertemplate="<b>%{text}</b><br>Sqft: %{x:,.0f}<br>Value: %{y:,.0f}<extra></extra>",
+            showlegend=False
+        ), row=row, col=col)
+fig_bubble.update_layout(height=800, template="plotly_white", title_text="Performance vs. Size by Service Tier", title_x=0.5)
+
+# 2. Heatmap Correlations
+ids_list = [m['id'] for m in METRIC_MAP if m['id'] in df_analysis.columns]
+labels_list = [m['label'] for m in METRIC_MAP if m['id'] in df_analysis.columns]
+if ids_list:
+    corr = df_analysis[ids_list].corr()
+    fig_correlation = go.Figure(data=go.Heatmap(
+        z=corr.values, x=labels_list, y=labels_list, colorscale="RdBu", zmin=-1, zmax=1,
+        text=corr.values.round(2), texttemplate="%{text}"
+    ))
+    fig_correlation.update_layout(title="Metric Correlation Matrix", height=500, width=500, template="plotly_white", title_x=0.5)
+
+# 3. Performance Rankings
+fig_rankings = make_subplots(rows=4, cols=2, horizontal_spacing=0.2, vertical_spacing=0.08,
+                            subplot_titles=[f"Top/Bottom 10: {m['label']}" for m in METRIC_MAP for _ in (1,2)])
+for i, m in enumerate(METRIC_MAP):
+    if m['id'] in df_analysis.columns:
+        sorted_df = df_analysis.sort_values(m['id'], ascending=False)
+        top, bot = sorted_df.head(10).iloc[::-1], sorted_df.tail(10)
+        fig_rankings.add_trace(go.Bar(x=top[m['id']], y=top['BranchName'], orientation='h', marker_color='#1a6fc4', showlegend=False), row=i+1, col=1)
+        fig_rankings.add_trace(go.Bar(x=bot[m['id']], y=bot['BranchName'], orientation='h', marker_color='#e05b3a', showlegend=False), row=i+1, col=2)
+fig_rankings.update_layout(height=1200, title_text="Branch Metrics Ranking", template="plotly_white", margin=dict(l=200))
 
 def create_branch_bar_chart(df, x_col, y_col, title, y_label):
     fig = px.bar(
