@@ -4,7 +4,7 @@ from utils import *
 @st.cache_data
 def load_data(DATA_URL):
     data = pd.read_csv(DATA_URL)
-    for col in ['GIFT_DATE', 'CRM_INTERACTION_DATE', 'SENT_DATE']:
+    for col in ['GIFT_DATE', 'CRM_INTERACTION_DATE', 'SENT_DATE','StartDateLocal']:
         if col in data.columns:
             data[col] = pd.to_datetime(data[col])
     return data
@@ -18,6 +18,7 @@ df_circulation = load_data(path + "tpl-circulation-annual-by-branch.csv")
 df_workstation_usage = load_data(path + "tpl-workstation-usage-annual-by-branch.csv")
 df_space_rental = load_data(path + "tpl-branch-space-rentals-2024.csv")
 df_neighborhoods = load_data(path + "Neighbourhoods.csv")
+df_events = load_data(path + "tpl-events-feed.csv")
 
 # Physical branches        
 physical = branch_info[branch_info['PhysicalBranch'] != 0]
@@ -117,7 +118,85 @@ df_merged_geo = pd.merge(
 df_map_data = df_merged_geo
 
 # Create massive dataset
+# --- Combine Annual Metrics ---
+# Start with card registrations
+df_combined = df_card_registration
 
+# Merge circulation
+df_combined = pd.merge(
+    df_combined,
+    df_circulation.drop(columns=['_id']), # Drop _id to avoid duplicate columns
+    on=['BranchCode', 'Year'],
+    how='outer' # Use outer merge to keep all years and branches
+)
+
+# Merge visits
+df_combined = pd.merge(
+    df_combined,
+    df_visits.drop(columns=['_id']), # Drop _id to avoid duplicate columns
+    on=['BranchCode', 'Year'],
+    how='outer'
+)
+
+# Merge workstation usage
+df_combined = pd.merge(
+    df_combined,
+    df_workstation_usage.drop(columns=['_id']), # Drop _id to avoid duplicate columns
+    on=['BranchCode', 'Year'],
+    how='outer'
+)
+
+# Fill NaN values for numerical annual metrics with 0 (assuming no activity if data is missing)
+df_combined['Registrations'].fillna(0, inplace=True)
+df_combined['Circulation'].fillna(0, inplace=True)
+df_combined['Visits'].fillna(0, inplace=True)
+df_combined['Sessions'].fillna(0, inplace=True)
+
+# Ensure 'Year' is an integer, coercing errors for any potential NaNs after merge
+df_combined['Year'] = df_combined['Year'].fillna(0).astype(int)
+
+
+
+# --- Prepare Space Rentals  ---
+# Rename 'Branch Code' to 'BranchCode' for consistency
+df_space_rental.rename(columns={'Branch Code': 'BranchCode'}, inplace=True)
+
+# Convert 'Square footage' to numeric, coercing errors to NaN
+df_space_rental['Square footage'] = pd.to_numeric(df_space_rental['Square footage'], errors='coerce')
+df_space_rental['MaxCapacity'] = pd.to_numeric(df_space_rental['MaxCapacity'], errors='coerce')
+
+# Group by BranchCode and sum relevant metrics
+df_space_rentals_summary = df_space_rental.groupby('BranchCode').agg(
+    TotalRentalMaxCapacity=('MaxCapacity', 'sum'),
+    TotalRentalSquareFootage=('Square footage', 'sum')
+).reset_index()
+
+# Fill NaN values in the summary with 0
+df_space_rentals_summary.fillna(0, inplace=True)
+
+# --- Step 4: Final Merge ---
+# Merge combined annual metrics with general info
+df_master = pd.merge(
+    df_combined,
+    physical.drop(columns=['_id']), # Drop _id from general_info to avoid duplicate column after merge
+    on='BranchCode',
+    how='left'
+)
+
+# Convert 'SquareFootage' in df_master to numeric, coercing errors to NaN before filling
+df_master['SquareFootage'] = pd.to_numeric(df_master['SquareFootage'], errors='coerce')
+
+# Merge with space rentals summary
+df_master = pd.merge(
+    df_master,
+    df_space_rentals_summary,
+    on='BranchCode',
+    how='left'
+)
+
+# Fill any remaining NaN values in numerical columns that originated from the merges
+df_master['TotalRentalMaxCapacity'].fillna(0, inplace=True)
+df_master['TotalRentalSquareFootage'].fillna(0, inplace=True)
 
 # --- Generate Figures ---
 fig_bubble = make_subplots(
