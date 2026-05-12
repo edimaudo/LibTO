@@ -21,8 +21,7 @@ df_neighborhoods = load_data(path + "Neighbourhoods.csv")
 
 # Physical branches        
 physical = branch_info[branch_info['PhysicalBranch'] != 0]
-# Clean columns for physical base to avoid hidden spaces
-physical.columns = physical.columns.str.strip()
+physical.columns = physical.columns.str.strip() # Clean columns for physical base to avoid hidden spaces
 physical['SquareFootage'] = pd.to_numeric(physical['SquareFootage'].astype(str).str.replace(',', ''), errors='coerce')      
 physical['Workstations'] = pd.to_numeric(physical['Workstations'], errors='coerce')
 physical['KidsStop'] = pd.to_numeric(physical['KidsStop'], errors='coerce')
@@ -116,6 +115,9 @@ df_merged_geo = pd.merge(
 )
 
 df_map_data = df_merged_geo
+
+# Create massive dataset
+
 
 # --- Generate Figures ---
 fig_bubble = make_subplots(
