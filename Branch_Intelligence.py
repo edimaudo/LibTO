@@ -83,7 +83,7 @@ with middle_container:
         st.write("Leading Reading Avilable" + " : " + str("Yes" if branch_df['LeadingReading'][0] == 1 else "No"))
 
 with bottom_container:
-    option = st.selectbox("Options",("Trends", "Forecasts","Events" ,"Branch Q&A"))
+    option = st.selectbox("Options",("Branch Q&A","Trends", "Forecasts","Events"))
     branch_code = branch_df['BranchCode'][0]
     # Clean columns of trend dataframes for matching
     df_card_registration.columns = df_card_registration.columns.str.strip()
@@ -197,7 +197,7 @@ with bottom_container:
     elif option == "Events":
         st.dataframe(df_filtered_events)
     elif option == "Branch Q&A":
-        st.write("Ask a question about " + str(branch_df['BranchName'][0]))
+        st.write("Ask a question about " + str(branch_df['BranchName'][0]) + " Branch")
         branch_question_txt = st.text_area(label="",value="",placeholder=None,key=1)
         branch_question_button = st.button("Get Inisghts", type="primary")
         instruction="""
@@ -210,9 +210,9 @@ with bottom_container:
         if branch_question_button:
             st.html("<p> </p>")
             if branch_question_txt.strip():    
-                st.subheader("Insights")
+                st.subheader("Q&A Results")
                 with st.spinner("Analyzing data..."):
-                    analysis = analyze_dataframe(df_master, branch_question_txt,instruction)
+                    analysis = analyze_dataframe(df_events_with_branch_info, branch_question_txt,instruction)
                     st.markdown(analysis)
             else:
                 st.warning("Please enter a question in the text area above.")
