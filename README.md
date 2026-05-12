@@ -4,23 +4,17 @@ By leveraging Toronto Open Data, libTO allows denizens to understand library bra
 
 ## Key Features
 ### Overview
-A high-level overview of the Toronto Public Library System
+- A high-level overview of the Toronto Public Library Network
 
 ### Branch Intelligence
-Library Operations: Ask questions about library operations + understand how library branches have changed overtime
-- ~~Library Branch Agent: Can ask questions about library information or use it to search for certain amenities the library has~~
-- Library Branch Forecaster: A tool to forecast visits, card registrations, workstation usage, circulations
-
-### Branch Programs & Events
-Libeary Events: Leverages open data to show events happening at the different branches
-- ~~Library event list~~
-- ~~Event Concierge Agent: Discover branch programs and events filtered by AI to match specific user needs~~
+- Shows trends to understand how a library branchhas have changed overtime + Library Branch Forecaster: A tool to forecast visits, card registrations, workstation usage, circulations
+- Provides the ability to an ask questions about a particular library using the branch agent
 
 ## Tech Stack
 - Front-end: Streamlit 
 - Data Processing: Pandas 
 - Visualizations: Plotly
-- ~~AI Intelligence:~~
+- AI Intelligence:Google Gemini
 
 ## Getting Started
 1. Environment Configuration
@@ -28,7 +22,7 @@ Create a .env file in the root directory with your AI credentials:
 
 Bash
 ```
-
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 2. Installation
