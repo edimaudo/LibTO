@@ -25,11 +25,13 @@ from google import genai
 import google.generativeai as genai
 from dotenv import load_dotenv, dotenv_values 
 
+load_dotenv()
+
 # App Information
 APP_NAME = 'LibTO'
 ABOUT_HEADER = 'About'
-OVERVIEW_HEADER = 'Library Insights'
-BRANCH_INTELLIGENCE_HEADER = "Branch Intelligence"
+OVERVIEW_HEADER = 'TPL Overview'
+BRANCH_INTELLIGENCE_HEADER = "TPL Branch Intelligence"
 BRANCH_PROGRAM_EVENT_HEADER = 'Branch Program & Events'
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -37,3 +39,4 @@ st.set_page_config(
     page_title=APP_NAME,
     layout="wide"
 )
+
