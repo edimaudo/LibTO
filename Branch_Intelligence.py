@@ -42,12 +42,19 @@ with middle_container:
         st.write("Leading Reading Avilable" + " : " + str("Yes" if branch_df['LeadingReading'][0] == 1 else "No"))
 
 with bottom_container:
-    option = st.selectbox("Options",("Trends", "Forecasts", "Branch Agent"),)
+    option = st.selectbox("Options",("Trends", "Forecasts", "Branch Agent"))
+    st.subheader("Branch Trends")
     branch_code = branch_df['BranchCode'][0]
-    branch_registrations = registration[registration['BranchCode'] == branch_code] 
-    branch_circulation = circulation[circulation['BranchCode'] == branch_code]
-    branch_visits = visits[visits['BranchCode'] == branch_code]
-    branch_workstation_usage = workstation[workstation['BranchCode'] == branch_code]
+    # Clean columns of trend dataframes for matching
+    df_card_registration.columns = df_card_registration.columns.str.strip()
+    df_circulation.columns = df_circulation.columns.str.strip()
+    df_visits.columns = df_visits.columns.str.strip()
+    df_workstation_usage.columns = df_workstation_usage.columns.str.strip()
+        
+    branch_registrations = df_card_registration[df_card_registration['BranchCode'] == branch_code] 
+    branch_circulation = df_circulation[df_circulation['BranchCode'] == branch_code]
+    branch_visits = df_visits[df_visits['BranchCode'] == branch_code]
+    branch_workstation_usage = df_workstation_usage[df_workstation_usage['BranchCode'] == branch_code]
     if option == "Trends":
         if len(branch_code) > 0:
             col1, col2 = st.columns(2)
@@ -81,11 +88,11 @@ with bottom_container:
                 y_label='Total Sessions'
             )
             with col1:
-                st.plotly_chart(fig_registrations_branch)
-                st.plotly_chart(fig_circulation_branch)
+                st.plotly_chart(fig_registrations_branch,width='stretch')
+                st.plotly_chart(fig_circulation_branch,width='stretch')
             with col2:
-                st.plotly_chart(fig_visits_branch)
-                st.plotly_chart(fig_workstation_usage_branch)
+                st.plotly_chart(fig_visits_branch,width='stretch')
+                st.plotly_chart(fig_workstation_usage_branch,width='stretch')
         else:
             print(f"Branch '{branch_df['BranchName'][0]}' not found.")
     
@@ -147,7 +154,7 @@ with bottom_container:
         with col2:
             st.plotly_chart(visits_forecast)
             st.plotly_chart(workstation_forecast)
-    else:
+    elif option == "Branch Agent":
         pass
 
     
