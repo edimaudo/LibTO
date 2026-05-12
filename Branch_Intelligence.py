@@ -42,7 +42,7 @@ with middle_container:
         st.write("Leading Reading Avilable" + " : " + str("Yes" if branch_df['LeadingReading'][0] == 1 else "No"))
 
 with bottom_container:
-    option = st.selectbox("Options",("Trends", "Forecasts", "Branch Agent"))
+    option = st.selectbox("Options",("Trends", "Forecasts","Events" ,"Branch Agent"))
     st.subheader("Branch Trends")
     branch_code = branch_df['BranchCode'][0]
     # Clean columns of trend dataframes for matching
@@ -50,7 +50,6 @@ with bottom_container:
     df_circulation.columns = df_circulation.columns.str.strip()
     df_visits.columns = df_visits.columns.str.strip()
     df_workstation_usage.columns = df_workstation_usage.columns.str.strip()
-        
     branch_registrations = df_card_registration[df_card_registration['BranchCode'] == branch_code] 
     branch_circulation = df_circulation[df_circulation['BranchCode'] == branch_code]
     branch_visits = df_visits[df_visits['BranchCode'] == branch_code]
@@ -154,6 +153,8 @@ with bottom_container:
         with col2:
             st.plotly_chart(visits_forecast)
             st.plotly_chart(workstation_forecast)
+    elif option == "Event":
+        pass
     elif option == "Branch Agent":
         pass
 
