@@ -199,10 +199,32 @@ df_master['TotalRentalMaxCapacity'].fillna(0, inplace=True)
 df_master['TotalRentalSquareFootage'].fillna(0, inplace=True)
 
 # --- Generate Figures ---
+# 1. Define the mapping for the legend labels
+label_map = {
+    "NL": "Neighbourhood Libraries",
+    "RR": "Research and Reference",
+    "DL": "District Libraries"
+}
+
+# --- Generate Figures ---
 fig_bubble = make_subplots(
     rows=2, cols=2, subplot_titles=[m['label'] for m in METRIC_MAP],
     horizontal_spacing=0.1, vertical_spacing=0.15
 )
+
+for tier, config in TIER_CONFIG.items():
+    # 2. Use the map to get the full name, default to the original tier if not found
+    full_name = label_map.get(tier, tier)
+    
+    fig_bubble.add_trace(go.Scatter(
+        x=[None], y=[None],
+        mode='markers',
+        marker=dict(size=10, color=config.get('color', '#AAAAAA')),
+        name=full_name,     # Updated to show full name in legend
+        showlegend=True,
+        legendgroup=tier
+    ))
+
 for i, m in enumerate(METRIC_MAP):
     if m['id'] in df_analysis.columns:
         row, col = (i // 2 + 1), (i % 2 + 1)
@@ -214,10 +236,17 @@ for i, m in enumerate(METRIC_MAP):
             x=df_analysis['SquareFootage'], y=vals, mode='markers',
             marker=dict(size=b_sizes, color=colors, opacity=0.7, line=dict(width=0.5, color='white')),
             text=df_analysis['BranchName'],
-            hovertemplate="<b>%{text}</b><br>Sq. ft: %{x:,.0f}<br>Value: %{y:,.0f}<extra></extra>",
-            showlegend=False
+            hovertemplate="<b>%{text}</b><br>Sq. ft: %{x:,.0f}<br>Value: %{y:,.2f}<extra></extra>",
+            showlegend=False 
         ), row=row, col=col)
-fig_bubble.update_layout(height=800, template="plotly_white", title_text="Performance vs. Size by Service Tier", title_x=0.5)
+
+fig_bubble.update_layout(
+    height=800, 
+    template="plotly_white", 
+    title_text="Performance vs. Size by Service Tier", 
+    title_x=0.5,
+    legend_title_text="Service Tier"
+)
 
 # 2. Heatmap Correlations
 ids_list = [m['id'] for m in METRIC_MAP if m['id'] in df_analysis.columns]
@@ -231,16 +260,38 @@ if ids_list:
     fig_correlation.update_layout(title="Metric Correlation Matrix", height=500, width=500, template="plotly_white", title_x=0.5)
 
 # 3. Performance Rankings
-fig_rankings = make_subplots(rows=4, cols=2, horizontal_spacing=0.2, vertical_spacing=0.08,
-                            subplot_titles=[f"Top/Bottom 10: {m['label']}" for m in METRIC_MAP for _ in (1,2)])
+titles = []
+for m in METRIC_MAP:
+    titles.append(f"Top 10: {m['label']}")
+    titles.append(f"Bottom 10: {m['label']}")
+
+fig_rankings = make_subplots(
+    rows=4, 
+    cols=2, 
+    horizontal_spacing=0.2, 
+    vertical_spacing=0.08,
+    subplot_titles=titles # Use the new list here
+)
+
 for i, m in enumerate(METRIC_MAP):
     if m['id'] in df_analysis.columns:
         sorted_df = df_analysis.sort_values(m['id'], ascending=False)
         top, bot = sorted_df.head(10).iloc[::-1], sorted_df.tail(10)
-        fig_rankings.add_trace(go.Bar(x=top[m['id']], y=top['BranchName'], orientation='h', marker_color='#1a6fc4', showlegend=False), row=i+1, col=1)
-        fig_rankings.add_trace(go.Bar(x=bot[m['id']], y=bot['BranchName'], orientation='h', marker_color='#e05b3a', showlegend=False), row=i+1, col=2)
-fig_rankings.update_layout(height=1200, title_text="Branch Metrics Ranking", template="plotly_white", margin=dict(l=200), title_x=0.5)
+        
+        # Top 10 (Left Column)
+        fig_rankings.add_trace(
+            go.Bar(x=top[m['id']], y=top['BranchName'], orientation='h', 
+                   marker_color='#1a6fc4', showlegend=False), 
+            row=i+1, col=1
+        )
+        # Bottom 10 (Right Column)
+        fig_rankings.add_trace(
+            go.Bar(x=bot[m['id']], y=bot['BranchName'], orientation='h', 
+                   marker_color='#e05b3a', showlegend=False), 
+            row=i+1, col=2
+        )
 
+fig_rankings.update_layout(height=1200, title_text="Branch Metrics Ranking", template="plotly_white", margin=dict(l=200), title_x=0.5)
 def create_branch_bar_chart(df, x_col, y_col, title, y_label):
     fig = px.bar(
         df,
