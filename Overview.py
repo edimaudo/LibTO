@@ -20,7 +20,6 @@ top_container = st.container()
 bottom_container = st.container()
 
 with top_container:
-    #st.subheader("Toronto Public Library Overview")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric(label="No. of Branches", value=num_libraries)
@@ -36,8 +35,7 @@ with top_container:
         st.metric(label="Adult Literacy Branches", value=adult_literacy)
 
 with bottom_container:
-    #st.subheader("Toronto Public Library Insights")
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(['Branch Size Heatmap', "Branch Metrics Rankings", "Branch Size vs Metrics", "Metric Correlations", "Annual Metrics Trends","TPL Network Q&A"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["TPL Network Q&A",'Branch Size Heatmap', "Branch Metrics Rankings", "Branch Size vs Metrics", "Metric Correlations", "Annual Metrics Trends"])
     with tab1:
         map_clean = df_map_data.dropna(subset=['Lat', 'Long']).copy()
         map_clean['SquareFootage'] = pd.to_numeric(map_clean['SquareFootage'], errors='coerce')
@@ -68,15 +66,15 @@ with bottom_container:
             tpl_question_button = st.button("Get Inisghts", type="primary")
             instruction="""
                 Return your entire response in professional Markdown format:
-                1. Use ## for Section Headers.
+                1. Use ## for Section Headers. The sections are 'Question','Analysis','Insight'
                 2. Use **bold** for key insights and numbers.
                 3. Use Markdown tables if comparing multiple data points.
-                4. If there is a clear trend, provide a 'Key Takeaway' section at the end.
+                4. If there is a clear trend, add a 'Key Takeaway' section at the end.
             """
             if tpl_question_button:
                 st.html("<p> </p>")
                 if tpl_question_txt.strip():    
-                    st.subheader("Insights")
+                    st.subheader("Q&A Results")
                     with st.spinner("Analyzing data..."):
                         analysis = analyze_dataframe(df_master, tpl_question_txt,instruction)
                         st.markdown(analysis)
