@@ -63,4 +63,5 @@ with bottom_container:
                 fig_t.update_layout(template='plotly_white', height=400, title_x=0.5)
                 if i % 2 == 0: col_a.plotly_chart(fig_t)
                 else: col_b.plotly_chart(fig_t)
-
+        ##with tab6:
+        ##    pass
