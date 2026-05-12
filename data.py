@@ -330,3 +330,29 @@ def plot_forecast(df, value_col, forecast_index, forecast_values, title, y_label
     )
 
     return fig
+
+# Gemini Model
+api_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel("gemini-2.5-flash")
+def analyze_dataframe(df, user_query, instructions="Provide a clear, concise analysis in Markdown."):
+    # 1. Convert the existing DataFrame to a CSV-formatted string
+    csv_data = df.to_csv(index=False)
+    
+    # 2. Build a structured prompt using the flexible instructions
+    prompt = f"""
+    You are an expert data analyst. Below is a dataset in CSV format.
+    
+    DATASET:
+    {csv_data}
+    
+    USER QUERY:
+    {user_query}
+    
+    INSTRUCTIONS:
+    {instructions}
+    """
+    
+    # 3. Get the response
+    response = model.generate_content(prompt)
+    return response.text
