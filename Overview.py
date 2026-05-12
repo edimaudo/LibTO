@@ -3,7 +3,7 @@ from data import *
 
 st.title(APP_NAME)
 st.header(OVERVIEW_HEADER)
-st.write("LibTO is a civic intelligence app designed for Toronto denizens to get insights into the Toronto Public Library (TPL) Network")
+st.write("LibTO is a civic intelligence app designed for Toronto denizens to get insights into the Toronto Public Library (TPL) Network.")
 
 # Calculate KPIs
 # KPIs
@@ -21,7 +21,7 @@ top_container = st.container()
 bottom_container = st.container()
 
 with top_container:
-    st.subheader("Toronto Public Library Overview")
+    #st.subheader("Toronto Public Library Overview")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric(label="No. of Branches", value=num_libraries)
@@ -37,8 +37,8 @@ with top_container:
         st.metric(label="Adult Literacy Branches", value=adult_literacy)
 
 with bottom_container:
-    st.subheader("Toronto Public Library Insights")
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(['Size Map', "Rankings", "Size vs Performance", "Correlations", "Trends","TPL Network Q&A"])
+    #st.subheader("Toronto Public Library Insights")
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(['Branch Size Heatmap', "Branch Metrics Rankings", "Branch Size vs Metrics", "Metric Correlations", "Annual Metrics Trends","TPL Network Q&A"])
     with tab1:
         map_clean = df_map_data.dropna(subset=['Lat', 'Long']).copy()
         map_clean['SquareFootage'] = pd.to_numeric(map_clean['SquareFootage'], errors='coerce')
@@ -64,4 +64,25 @@ with bottom_container:
                 if i % 2 == 0: col_a.plotly_chart(fig_t)
                 else: col_b.plotly_chart(fig_t)
         with tab6:
-            pass
+            st.write("Ask a question about the Toronto Public Library Network or Metrics")
+            tpl_question_txt = st.text_area(label=" ",value="",placeholder=None,key=1)
+            tpl_question_button = st.button("Get Inisghts", type="primary")
+            instruction="""
+                Return your entire response in professional Markdown format:
+                1. Use ## for Section Headers.
+                2. Use **bold** for key insights and numbers.
+                3. Use Markdown tables if comparing multiple data points.
+                4. If there is a clear trend, provide a 'Key Takeaway' section at the end.
+            """
+            if tpl_question_button:
+                st.html("<p> </p>")
+                if tpl_question_txt.strip():    
+                    st.subheader("Insights")
+                    with st.spinner("Analyzing data..."):
+                        analysis = analyze_dataframe(df_master, tpl_question_txt,instruction)
+                        st.markdown(analysis)
+                else:
+                    st.warning("Please enter a question in the text area above.")
+
+
+                    
