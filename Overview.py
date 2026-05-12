@@ -38,7 +38,7 @@ with top_container:
 
 with bottom_container:
     st.subheader("Toronto Public Library Insights")
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(['Size Map', "Rankings", "Size vs Performance", "Correlations", "Trends"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(['Size Map', "Rankings", "Size vs Performance", "Correlations", "Trends","TPL Network Q&A"])
     with tab1:
         map_clean = df_map_data.dropna(subset=['Lat', 'Long']).copy()
         map_clean['SquareFootage'] = pd.to_numeric(map_clean['SquareFootage'], errors='coerce')
@@ -63,5 +63,5 @@ with bottom_container:
                 fig_t.update_layout(template='plotly_white', height=400, title_x=0.5)
                 if i % 2 == 0: col_a.plotly_chart(fig_t)
                 else: col_b.plotly_chart(fig_t)
-        ##with tab6:
-        ##    pass
+        with tab6:
+            pass
