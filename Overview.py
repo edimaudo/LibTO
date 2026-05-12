@@ -5,7 +5,6 @@ st.title(APP_NAME)
 st.header(OVERVIEW_HEADER)
 st.write("LibTO is a civic intelligence app designed for Toronto denizens to get insights into the Toronto Public Library (TPL) Network.")
 
-# Calculate KPIs
 # KPIs
 num_libraries = len(physical)
 avg_sq_ft = f"{physical['SquareFootage'].mean():,.0f}"
