@@ -382,10 +382,31 @@ def plot_forecast(df, value_col, forecast_index, forecast_values, title, y_label
 
     return fig
 
+# Define your keyword lists
+EVENT_KEYWORDS = ['event', 'workshop', 'program', 'class', 'schedule', 'time', 'location', 'audience','language','event type']
+TREND_KEYWORDS = ['trend', 'growth', 'comparison','total', 'performance','visits','workstation','usage','card','registration','circulation','session']
+
+def route_query(user_input):
+    # Standardize the input
+    text = user_input.lower()
+    
+    # Check for keywords
+    is_event_query = any(word in text for word in EVENT_KEYWORDS)
+    is_trend_query = any(word in text for word in TREND_KEYWORDS)
+    
+    return is_event_query, is_trend_query
+
 # Gemini Model
 api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-2.5-flash")
+instruction="""
+                Return your entire response in professional Markdown format:
+                1. Use ## for Section Headers. The sections are 'Question','Analysis','Insight'
+                2. Use **bold** for key insights and numbers.
+                3. Use Markdown tables if comparing multiple data points.
+                4. If there is a clear trend, add a 'Key Takeaway' section at the end.
+            """
 def analyze_dataframe(df, user_query, instructions="Provide a clear, concise analysis in Markdown."):
     # 1. Convert the existing DataFrame to a CSV-formatted string
     csv_data = df.to_csv(index=False)
