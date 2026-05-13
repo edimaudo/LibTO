@@ -7,7 +7,7 @@ st.header(BRANCH_INTELLIGENCE_HEADER)
 # setup data
 branch_option = st.sidebar.selectbox("Branch",branch_list)
 branch_df = physical[(physical['BranchName'] == branch_option)].reset_index()
-print(branch_df)
+
 df_events_with_branch_info = pd.merge(
     df_events,
     branch_df,
@@ -36,16 +36,18 @@ df_filtered_events.rename(columns={
     'LocationName': 'Location',
     'Audiences': 'Audience',
     'Languages': 'Language',
-    'EventTypes': 'Event Types'
+    'EventTypes': 'Event Type'
 }, inplace=True)
 
-# clean up date and time
-# Convert 'Start Time' and 'End Time' to datetime objects and then format them
-df_filtered_events['Start Time'] = pd.to_datetime(df_filtered_events['Start Time']).dt.strftime('%I:%M%p')
-df_filtered_events['End Time'] = pd.to_datetime(df_filtered_events['End Time']).dt.strftime('%I:%M%p')
 
-# Convert 'Event Date' to datetime objects and then format it to show only the date
-df_filtered_events['Event Date'] = pd.to_datetime(df_filtered_events['Event Date']).dt.strftime('%Y-%m-%d')
+df_filtered_events['Start Time'] = pd.to_datetime(df_filtered_events['Start Time'])
+df_filtered_events['Event Date'] = pd.to_datetime(df_filtered_events['Event Date'])
+df_filtered_events.sort_values(by=['Event Date', 'Start Time'], ascending=True, inplace=True) # Sort by Event Date then Start Time
+
+# apply the formatting for display
+df_filtered_events['End Time'] = pd.to_datetime(df_filtered_events['End Time']).dt.strftime('%I:%M%p')
+df_filtered_events['Start Time'] = df_filtered_events['Start Time'].dt.strftime('%I:%M%p')
+df_filtered_events['Event Date'] = df_filtered_events['Event Date'].dt.strftime('%Y-%m-%d')
 
 # setup containers
 top_container = st.container()
@@ -90,10 +92,25 @@ with bottom_container:
     df_circulation.columns = df_circulation.columns.str.strip()
     df_visits.columns = df_visits.columns.str.strip()
     df_workstation_usage.columns = df_workstation_usage.columns.str.strip()
-    branch_registrations = df_card_registration[df_card_registration['BranchCode'] == branch_code] 
-    branch_circulation = df_circulation[df_circulation['BranchCode'] == branch_code]
-    branch_visits = df_visits[df_visits['BranchCode'] == branch_code]
-    branch_workstation_usage = df_workstation_usage[df_workstation_usage['BranchCode'] == branch_code]
+    # branch_registrations = df_card_registration[df_card_registration['BranchCode'] == branch_code] 
+    # branch_circulation = df_circulation[df_circulation['BranchCode'] == branch_code]
+    # branch_visits = df_visits[df_visits['BranchCode'] == branch_code]
+    # branch_workstation_usage = df_workstation_usage[df_workstation_usage['BranchCode'] == branch_code]
+    branch_registrations = df_card_registration[df_card_registration['BranchCode'] == branch_code][['Year', 'Registrations']]
+    branch_circulation = df_circulation[df_circulation['BranchCode'] == branch_code][['Year', 'Circulation']]
+    branch_visits = df_visits[df_visits['BranchCode'] == branch_code][['Year', 'Visits']]
+    branch_workstation_usage = df_workstation_usage[df_workstation_usage['BranchCode'] == branch_code][['Year', 'Sessions']]
+
+    # 2. List the dataframes to be merged
+    dfs_to_merge = [
+        branch_registrations, 
+        branch_circulation, 
+        branch_visits, 
+        branch_workstation_usage
+    ]
+    df_final = reduce(lambda left, right: pd.merge(left, right, on='Year', how='outer'), dfs_to_merge)
+
+    df_final = df_final.sort_values('Year').fillna(0)
     if option == "Trends":
         st.subheader("Branch Trends")
         if len(branch_code) > 0:
@@ -189,31 +206,29 @@ with bottom_container:
         )
 
         with col1:
-            st.plotly_chart(registration_forecast)
-            st.plotly_chart(circulation_forecast)
+            st.plotly_chart(registration_forecast,COMMON_LAYOUT)
+            st.plotly_chart(circulation_forecast,COMMON_LAYOUT)
         with col2:
-            st.plotly_chart(visits_forecast)
-            st.plotly_chart(workstation_forecast)
+            st.plotly_chart(visits_forecast,COMMON_LAYOUT)
+            st.plotly_chart(workstation_forecast,COMMON_LAYOUT)
     elif option == "Events":
-        st.dataframe(df_filtered_events)
+        st.dataframe(df_filtered_events,hide_index=True)
     elif option == "Branch Q&A":
         st.write("Ask a question about " + str(branch_df['BranchName'][0]) + " Branch")
         branch_question_txt = st.text_area(label="",value="",placeholder=None,key=1)
         branch_question_button = st.button("Get Inisghts", type="primary")
-        instruction="""
-                Return your entire response in professional Markdown format:
-                1. Use ## for Section Headers.
-                2. Use **bold** for key insights and numbers.
-                3. Use Markdown tables if comparing multiple data points.
-                4. If there is a clear trend, provide a 'Key Takeaway' section at the end.
-            """
         if branch_question_button:
             st.html("<p> </p>")
             if branch_question_txt.strip():    
                 st.subheader("Q&A Results")
+                is_event, is_trend = route_query(branch_question_txt)
                 with st.spinner("Analyzing data..."):
-                    analysis = analyze_dataframe(df_events_with_branch_info, branch_question_txt,instruction)
-                    st.markdown(analysis)
+                    if is_event:
+                        analysis = analyze_dataframe(df_events_with_branch_info, branch_question_txt,instruction)
+                        st.markdown(analysis)
+                    elif is_trend:
+                        analysis = analyze_dataframe(df_final, branch_question_txt,instruction)
+                        st.markdown(analysis)                        
             else:
                 st.warning("Please enter a question in the text area above.")
 
