@@ -24,6 +24,7 @@ from pmdarima import auto_arima
 from google import genai
 import google.generativeai as genai
 from dotenv import load_dotenv, dotenv_values 
+from functools import reduce
 
 load_dotenv()
 
