@@ -408,10 +408,8 @@ instruction="""
                 4. If there is a clear trend, add a 'Key Takeaway' section at the end.
             """
 def analyze_dataframe(df, user_query, instructions="Provide a clear, concise analysis in Markdown."):
-    # 1. Convert the existing DataFrame to a CSV-formatted string
     csv_data = df.to_csv(index=False)
     
-    # 2. Build a structured prompt using the flexible instructions
     prompt = f"""
     You are an expert data analyst. Below is a dataset in CSV format.
     
@@ -425,7 +423,6 @@ def analyze_dataframe(df, user_query, instructions="Provide a clear, concise ana
     {instructions}
     """
     
-    # 3. Get the response
     response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt) # response = model.generate_content(prompt)
     return response.text
 
