@@ -398,10 +398,8 @@ def route_query(user_input):
     return is_event_query, is_trend_query
 
 # Gemini Model
-# api_key = os.getenv("GEMINI_API_KEY")
-# genai.configure(api_key=api_key)
+load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("models/gemini-2.5-flash") #model = genai.GenerativeModel("gemini-2.5-flash")
 instruction="""
                 Return your entire response in professional Markdown format:
                 1. Use ## for Section Headers. The sections are 'Question','Analysis','Insight'
@@ -428,7 +426,7 @@ def analyze_dataframe(df, user_query, instructions="Provide a clear, concise ana
     """
     
     # 3. Get the response
-    response = client.models.generate_content(model=model, contents=prompt) # response = model.generate_content(prompt)
+    response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt) # response = model.generate_content(prompt)
     return response.text
 
 
