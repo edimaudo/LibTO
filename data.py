@@ -34,9 +34,10 @@ physical['PresentSiteYear'] = pd.to_numeric(physical['PresentSiteYear'], errors=
 oldest = physical.sort_values('PresentSiteYear').iloc[0]
 
 # Branch List
-branch_list = physical['BranchName'].unique()
-branch_list = branch_list.astype('str')
-branch_list.sort()
+# branch_list = physical['BranchName'].unique()
+# branch_list = branch_list.astype('str')
+# branch_list.sort()
+branch_list = physical['BranchName'].sort_values().unique().astype(str)
 
 COMMON_LAYOUT = dict(
     template='plotly_white',
