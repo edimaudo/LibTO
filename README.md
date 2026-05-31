@@ -14,7 +14,7 @@ By leveraging Toronto Open Data, libTO allows denizens to understand library bra
 - Front-end: Streamlit 
 - Data Processing: Pandas 
 - Visualizations: Plotly
-- AI Intelligence:Google Gemini
+- AI Intelligence: Google Gemini
 
 ## Getting Started
 1. Environment Configuration
